@@ -73,11 +73,15 @@
     <!-- Header -->
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
       <div>
-        <div class="flex items-center gap-2.5 mb-1">
+        <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] tracking-wide">
             PREMIER LEAGUE
           </span>
           <span id="header-badge-sub" class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 · 14 完整赛季</span>
+          <div class="inline-flex items-center rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5 text-xs shadow-sm" role="group" aria-label="Language switch">
+            <button data-uilang="zh" class="uilang-btn px-2.5 py-0.5 rounded-md font-semibold cursor-pointer transition-colors">中文</button>
+            <button data-uilang="en" class="uilang-btn px-2.5 py-0.5 rounded-md font-semibold cursor-pointer transition-colors">English</button>
+          </div>
         </div>
         <h1 id="page-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
           英超历年最终排名全景图
@@ -133,9 +137,6 @@
             <button data-range="10" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 10 季</button>
             <button data-range="6" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 6 季</button>
           </div>
-          <button id="toggle-ui-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
-            🌐 EN
-          </button>
           <button id="toggle-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
             节点标签：英文简称
           </button>
@@ -838,7 +839,17 @@
         }
       });
 
-      document.getElementById('toggle-ui-lang').textContent = tr.uiLangBtn;
+      document.querySelectorAll('.uilang-btn').forEach(btn => {
+        const active = btn.dataset.uilang === uiLang;
+        if (active) {
+          btn.style.background = 'var(--primary)';
+          btn.style.color = 'var(--primary-foreground)';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--muted-foreground)';
+        }
+      });
+
       document.getElementById('toggle-lang').textContent =
         labelLang === 'en' ? tr.nodeLangEn : tr.nodeLangZh;
 
@@ -1353,16 +1364,20 @@
       });
     });
 
-    document.getElementById('toggle-ui-lang').addEventListener('click', () => {
-      uiLang = uiLang === 'zh' ? 'en' : 'zh';
-      localStorage.setItem('pl_ui_lang', uiLang);
-      if (uiLang === 'en') labelLang = 'en';
-      applyStaticTranslations();
-      updateControlButtons();
-      renderClubChips();
-      renderChampionsTimeline();
-      renderPinnedCards();
-      renderChart();
+    document.querySelectorAll('.uilang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nextLang = btn.dataset.uilang;
+        if (nextLang === uiLang) return;
+        uiLang = nextLang;
+        localStorage.setItem('pl_ui_lang', uiLang);
+        if (uiLang === 'en') labelLang = 'en';
+        applyStaticTranslations();
+        updateControlButtons();
+        renderClubChips();
+        renderChampionsTimeline();
+        renderPinnedCards();
+        renderChart();
+      });
     });
 
     document.getElementById('toggle-lang').addEventListener('click', () => {
