@@ -77,12 +77,12 @@
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] tracking-wide">
             PREMIER LEAGUE
           </span>
-          <span class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 · 14 完整赛季</span>
+          <span id="header-badge-sub" class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 · 14 完整赛季</span>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+        <h1 id="page-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
           英超历年最终排名全景图
         </h1>
-        <p class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
+        <p id="page-subtitle" class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
           一图纵览 2012 年以来全部 14 个赛季第 1–20 名轨迹 · 悬停查看积分详情 · 点击任意球队锁定对比
         </p>
       </div>
@@ -90,21 +90,15 @@
       <!-- Quick KPI Cards -->
       <div class="grid grid-cols-3 gap-2.5 shrink-0">
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div class="text-xs text-[var(--muted-foreground)]">夺冠最多</div>
-          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#38BDF8"></span>
-            <span>曼城 <span class="font-mono text-[var(--primary)]">7</span> 冠</span>
-          </div>
+          <div id="kpi-titles-label" class="text-xs text-[var(--muted-foreground)]">夺冠最多</div>
+          <div id="kpi-titles-val" class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5"></div>
         </div>
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div class="text-xs text-[var(--muted-foreground)]">最新冠军 (25–26)</div>
-          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
-            <span>阿森纳 <span class="font-mono">85分</span></span>
-          </div>
+          <div id="kpi-latest-label" class="text-xs text-[var(--muted-foreground)]">最新冠军 (25–26)</div>
+          <div id="kpi-latest-val" class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5"></div>
         </div>
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div class="text-xs text-[var(--muted-foreground)]">14 季全勤球队</div>
+          <div id="kpi-ever-label" class="text-xs text-[var(--muted-foreground)]">14 季全勤球队</div>
           <div id="ever-present-count" class="text-sm sm:text-base font-bold mt-0.5 font-mono">—</div>
         </div>
       </div>
@@ -132,13 +126,16 @@
           </button>
         </div>
 
-        <!-- Right Controls: Season Range, Labels & Theme -->
+        <!-- Right Controls: Season Range, Labels, UI Lang & Theme -->
         <div class="flex flex-wrap items-center gap-2">
           <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--background)] p-0.5 text-xs">
             <button data-range="all" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">全部 14 季</button>
             <button data-range="10" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 10 季</button>
             <button data-range="6" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 6 季</button>
           </div>
+          <button id="toggle-ui-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
+            🌐 EN
+          </button>
           <button id="toggle-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
             节点标签：英文简称
           </button>
@@ -153,7 +150,7 @@
 
       <!-- Quick Club Selector -->
       <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)] overflow-x-auto chart-scroll pb-1">
-        <span class="text-xs text-[var(--muted-foreground)] shrink-0 font-medium">点击锁定对比：</span>
+        <span id="pin-prompt" class="text-xs text-[var(--muted-foreground)] shrink-0 font-medium">点击锁定对比：</span>
         <div id="club-chips" class="flex items-center gap-1.5 shrink-0"></div>
       </div>
     </div>
@@ -165,23 +162,23 @@
         <div class="flex flex-wrap items-center gap-4">
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(245,158,11,0.28);border:1px solid #F59E0B"></span>
-            第 1 名 · 冠军
+            <span id="legend-champ">第 1 名 · 冠军</span>
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(16,185,129,0.16);border:1px solid #10B981"></span>
-            第 1–4 名 · 欧冠区
+            <span id="legend-ucl">第 1–4 名 · 欧冠区</span>
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(59,130,246,0.14);border:1px solid #3B82F6"></span>
-            第 5–6 名 · 欧战区
+            <span id="legend-uel">第 5–6 名 · 欧战区</span>
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(239,68,68,0.16);border:1px solid #EF4444"></span>
-            第 18–20 名 · 降级区
+            <span id="legend-rel">第 18–20 名 · 降级区</span>
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-5 border-t-2 border-dashed border-[var(--muted-foreground)] inline-block"></span>
-            降级后重返英超
+            <span id="legend-return">降级后重返英超</span>
           </span>
         </div>
         <div id="active-status" class="text-xs font-medium text-[var(--foreground)]"></div>
@@ -189,7 +186,7 @@
 
       <!-- SVG Container -->
       <div class="w-full overflow-x-auto chart-scroll">
-        <svg id="bump-chart" class="block select-none" role="img" aria-label="英超历年排名走势图"></svg>
+        <svg id="bump-chart" class="block select-none" role="img" aria-label="Premier League Standings Chart"></svg>
       </div>
     </div>
 
@@ -197,8 +194,8 @@
     <div id="team-summary-bar" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <h2 class="text-sm font-semibold text-[var(--foreground)]">2012–26 历届冠军与高光时刻</h2>
-          <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+          <h2 id="drawer-title" class="text-sm font-semibold text-[var(--foreground)]">2012–26 历届冠军与高光时刻</h2>
+          <p id="drawer-subtitle" class="text-xs text-[var(--muted-foreground)] mt-0.5">
             点击上方任意球队标签或图中节点，可在此查看该队 14 赛季完整排名曲线与统计摘要
           </p>
         </div>
@@ -216,43 +213,43 @@
     // Verified Premier League Final Standings Data (2012-13 through 2025-26)
     // =========================================================================
     const CLUBS = {
-      MCI: { name: 'Manchester City', zh: '曼城', shortZh: '曼城', color: '#38BDF8', tier: 'big6' },
-      ARS: { name: 'Arsenal', zh: '阿森纳', shortZh: '阿森纳', color: '#EF4444', tier: 'big6' },
-      LIV: { name: 'Liverpool', zh: '利物浦', shortZh: '利物浦', color: '#E11D48', tier: 'big6' },
-      CHE: { name: 'Chelsea', zh: '切尔西', shortZh: '切尔西', color: '#2563EB', tier: 'big6' },
-      MUN: { name: 'Manchester United', zh: '曼联', shortZh: '曼联', color: '#F97316', tier: 'big6' },
-      TOT: { name: 'Tottenham Hotspur', zh: '热刺', shortZh: '热刺', color: '#8B5CF6', tier: 'big6' },
-      LEI: { name: 'Leicester City', zh: '莱斯特城', shortZh: '莱斯特', color: '#06B6D4', tier: 'champ' },
-      AVL: { name: 'Aston Villa', zh: '阿斯顿维拉', shortZh: '维拉', color: '#A855F7', tier: 'horse' },
-      NEW: { name: 'Newcastle United', zh: '纽卡斯尔', shortZh: '纽卡', color: '#14B8A6', tier: 'horse' },
-      BHA: { name: 'Brighton & Hove Albion', zh: '布莱顿', shortZh: '布莱顿', color: '#0EA5E9', tier: 'horse' },
-      NFO: { name: 'Nottingham Forest', zh: '诺丁汉森林', shortZh: '森林', color: '#EC4899', tier: 'horse' },
-      BOU: { name: 'AFC Bournemouth', zh: '伯恩茅斯', shortZh: '樱桃', color: '#DC2626', tier: 'horse' },
-      EVE: { name: 'Everton', zh: '埃弗顿', shortZh: '埃弗顿', color: '#3B82F6', tier: 'mid' },
-      WHU: { name: 'West Ham United', zh: '西汉姆联', shortZh: '西汉姆', color: '#BE185D', tier: 'mid' },
-      CRY: { name: 'Crystal Palace', zh: '水晶宫', shortZh: '水晶宫', color: '#6366F1', tier: 'mid' },
-      WOL: { name: 'Wolverhampton Wanderers', zh: '狼队', shortZh: '狼队', color: '#F59E0B', tier: 'mid' },
-      FUL: { name: 'Fulham', zh: '富勒姆', shortZh: '富勒姆', color: '#64748B', tier: 'mid' },
-      BRE: { name: 'Brentford', zh: '布伦特福德', shortZh: '小蜜蜂', color: '#FB7185', tier: 'horse' },
-      SOU: { name: 'Southampton', zh: '南安普顿', shortZh: '圣徒', color: '#F43F5E', tier: 'mid' },
-      BUR: { name: 'Burnley', zh: '伯恩利', shortZh: '伯恩利', color: '#9D174D', tier: 'mid' },
-      SUN: { name: 'Sunderland', zh: '桑德兰', shortZh: '桑德兰', color: '#FB923C', tier: 'horse' },
-      LEE: { name: 'Leeds United', zh: '利兹联', shortZh: '利兹联', color: '#EAB308', tier: 'mid' },
-      STK: { name: 'Stoke City', zh: '斯托克城', shortZh: '斯托克', color: '#94A3B8', tier: 'other' },
-      SWA: { name: 'Swansea City', zh: '斯旺西', shortZh: '斯旺西', color: '#94A3B8', tier: 'other' },
-      WBA: { name: 'West Bromwich Albion', zh: '西布朗', shortZh: '西布朗', color: '#64748B', tier: 'other' },
-      WAT: { name: 'Watford', zh: '沃特福德', shortZh: '沃特福', color: '#D97706', tier: 'other' },
-      NOR: { name: 'Norwich City', zh: '诺维奇', shortZh: '诺维奇', color: '#84CC16', tier: 'other' },
-      SHU: { name: 'Sheffield United', zh: '谢菲尔德联', shortZh: '谢菲联', color: '#F87171', tier: 'other' },
-      HUL: { name: 'Hull City', zh: '赫尔城', shortZh: '赫尔城', color: '#F59E0B', tier: 'other' },
-      QPR: { name: 'Queens Park Rangers', zh: '女王公园巡游者', shortZh: 'QPR', color: '#60A5FA', tier: 'other' },
-      CAR: { name: 'Cardiff City', zh: '卡迪夫城', shortZh: '卡迪夫', color: '#38BDF8', tier: 'other' },
-      HUD: { name: 'Huddersfield Town', zh: '哈德斯菲尔德', shortZh: '哈镇', color: '#7DD3FC', tier: 'other' },
-      WIG: { name: 'Wigan Athletic', zh: '维冈竞技', shortZh: '维冈', color: '#60A5FA', tier: 'other' },
-      RDG: { name: 'Reading', zh: '雷丁', shortZh: '雷丁', color: '#818CF8', tier: 'other' },
-      MID: { name: 'Middlesbrough', zh: '米德尔斯堡', shortZh: '米堡', color: '#F87171', tier: 'other' },
-      LUT: { name: 'Luton Town', zh: '卢顿', shortZh: '卢顿', color: '#FB923C', tier: 'other' },
-      IPS: { name: 'Ipswich Town', zh: '伊普斯维奇', shortZh: '伊镇', color: '#3B82F6', tier: 'other' }
+      MCI: { name: 'Manchester City', shortEn: 'Man City', zh: '曼城', shortZh: '曼城', color: '#38BDF8', tier: 'big6', espnId: 382 },
+      ARS: { name: 'Arsenal', shortEn: 'Arsenal', zh: '阿森纳', shortZh: '阿森纳', color: '#EF4444', tier: 'big6', espnId: 359 },
+      LIV: { name: 'Liverpool', shortEn: 'Liverpool', zh: '利物浦', shortZh: '利物浦', color: '#E11D48', tier: 'big6', espnId: 364 },
+      CHE: { name: 'Chelsea', shortEn: 'Chelsea', zh: '切尔西', shortZh: '切尔西', color: '#2563EB', tier: 'big6', espnId: 363 },
+      MUN: { name: 'Manchester United', shortEn: 'Man Utd', zh: '曼联', shortZh: '曼联', color: '#F97316', tier: 'big6', espnId: 360 },
+      TOT: { name: 'Tottenham Hotspur', shortEn: 'Tottenham', zh: '热刺', shortZh: '热刺', color: '#8B5CF6', tier: 'big6', espnId: 367 },
+      LEI: { name: 'Leicester City', shortEn: 'Leicester', zh: '莱斯特城', shortZh: '莱斯特', color: '#06B6D4', tier: 'champ', espnId: 375 },
+      AVL: { name: 'Aston Villa', shortEn: 'Aston Villa', zh: '阿斯顿维拉', shortZh: '维拉', color: '#A855F7', tier: 'horse', espnId: 362 },
+      NEW: { name: 'Newcastle United', shortEn: 'Newcastle', zh: '纽卡斯尔', shortZh: '纽卡', color: '#14B8A6', tier: 'horse', espnId: 361 },
+      BHA: { name: 'Brighton & Hove Albion', shortEn: 'Brighton', zh: '布莱顿', shortZh: '布莱顿', color: '#0EA5E9', tier: 'horse', espnId: 331 },
+      NFO: { name: 'Nottingham Forest', shortEn: 'Nottm Forest', zh: '诺丁汉森林', shortZh: '森林', color: '#EC4899', tier: 'horse', espnId: 393 },
+      BOU: { name: 'AFC Bournemouth', shortEn: 'Bournemouth', zh: '伯恩茅斯', shortZh: '樱桃', color: '#DC2626', tier: 'horse', espnId: 349 },
+      EVE: { name: 'Everton', shortEn: 'Everton', zh: '埃弗顿', shortZh: '埃弗顿', color: '#3B82F6', tier: 'mid', espnId: 368 },
+      WHU: { name: 'West Ham United', shortEn: 'West Ham', zh: '西汉姆联', shortZh: '西汉姆', color: '#BE185D', tier: 'mid', espnId: 371 },
+      CRY: { name: 'Crystal Palace', shortEn: 'Crystal Palace', zh: '水晶宫', shortZh: '水晶宫', color: '#6366F1', tier: 'mid', espnId: 384 },
+      WOL: { name: 'Wolverhampton Wanderers', shortEn: 'Wolves', zh: '狼队', shortZh: '狼队', color: '#F59E0B', tier: 'mid', espnId: 380 },
+      FUL: { name: 'Fulham', shortEn: 'Fulham', zh: '富勒姆', shortZh: '富勒姆', color: '#64748B', tier: 'mid', espnId: 370 },
+      BRE: { name: 'Brentford', shortEn: 'Brentford', zh: '布伦特福德', shortZh: '小蜜蜂', color: '#FB7185', tier: 'horse', espnId: 337 },
+      SOU: { name: 'Southampton', shortEn: 'Southampton', zh: '南安普顿', shortZh: '圣徒', color: '#F43F5E', tier: 'mid', espnId: 376 },
+      BUR: { name: 'Burnley', shortEn: 'Burnley', zh: '伯恩利', shortZh: '伯恩利', color: '#9D174D', tier: 'mid', espnId: 379 },
+      SUN: { name: 'Sunderland', shortEn: 'Sunderland', zh: '桑德兰', shortZh: '桑德兰', color: '#FB923C', tier: 'horse', espnId: 366 },
+      LEE: { name: 'Leeds United', shortEn: 'Leeds', zh: '利兹联', shortZh: '利兹联', color: '#EAB308', tier: 'mid', espnId: 357 },
+      STK: { name: 'Stoke City', shortEn: 'Stoke', zh: '斯托克城', shortZh: '斯托克', color: '#94A3B8', tier: 'other', espnId: 336 },
+      SWA: { name: 'Swansea City', shortEn: 'Swansea', zh: '斯旺西', shortZh: '斯旺西', color: '#94A3B8', tier: 'other', espnId: 318 },
+      WBA: { name: 'West Bromwich Albion', shortEn: 'West Brom', zh: '西布朗', shortZh: '西布朗', color: '#64748B', tier: 'other', espnId: 383 },
+      WAT: { name: 'Watford', shortEn: 'Watford', zh: '沃特福德', shortZh: '沃特福', color: '#D97706', tier: 'other', espnId: 395 },
+      NOR: { name: 'Norwich City', shortEn: 'Norwich', zh: '诺维奇', shortZh: '诺维奇', color: '#84CC16', tier: 'other', espnId: 381 },
+      SHU: { name: 'Sheffield United', shortEn: 'Sheff Utd', zh: '谢菲尔德联', shortZh: '谢菲联', color: '#F87171', tier: 'other', espnId: 398 },
+      HUL: { name: 'Hull City', shortEn: 'Hull', zh: '赫尔城', shortZh: '赫尔城', color: '#F59E0B', tier: 'other', espnId: 306 },
+      QPR: { name: 'Queens Park Rangers', shortEn: 'QPR', zh: '女王公园巡游者', shortZh: 'QPR', color: '#60A5FA', tier: 'other', espnId: 334 },
+      CAR: { name: 'Cardiff City', shortEn: 'Cardiff', zh: '卡迪夫城', shortZh: '卡迪夫', color: '#38BDF8', tier: 'other', espnId: 347 },
+      HUD: { name: 'Huddersfield Town', shortEn: 'Huddersfield', zh: '哈德斯菲尔德', shortZh: '哈镇', color: '#7DD3FC', tier: 'other', espnId: 335 },
+      WIG: { name: 'Wigan Athletic', shortEn: 'Wigan', zh: '维冈竞技', shortZh: '维冈', color: '#60A5FA', tier: 'other', espnId: 350 },
+      RDG: { name: 'Reading', shortEn: 'Reading', zh: '雷丁', shortZh: '雷丁', color: '#818CF8', tier: 'other', espnId: 338 },
+      MID: { name: 'Middlesbrough', shortEn: 'Middlesbrough', zh: '米德尔斯堡', shortZh: '米堡', color: '#F87171', tier: 'other', espnId: 369 },
+      LUT: { name: 'Luton Town', shortEn: 'Luton', zh: '卢顿', shortZh: '卢顿', color: '#FB923C', tier: 'other', espnId: 301 },
+      IPS: { name: 'Ipswich Town', shortEn: 'Ipswich', zh: '伊普斯维奇', shortZh: '伊镇', color: '#3B82F6', tier: 'other', espnId: 373 }
     };
 
     const SEASONS = [
@@ -420,14 +417,228 @@
 
     // Ever-present clubs across all 14 seasons
     const everPresent = Object.values(clubHistory).filter(h => h.seasons.length === SEASONS.length);
-    document.getElementById('ever-present-count').textContent = `${everPresent.length} 支`;
 
     // State
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    let uiLang = (urlLang === 'en' || urlLang === 'zh') ? urlLang : (localStorage.getItem('pl_ui_lang') || 'zh');
     let currentMode = 'featured'; // featured | all | big6 | champions | darkhorses
     let currentRange = 'all';     // all | 10 | 6
-    let labelLang = 'en';         // en | zh
+    let labelLang = uiLang === 'en' ? 'en' : 'en'; // en | zh
     let pinnedTeams = new Set();
     let hoveredTeam = null;
+
+    const I18N = {
+      zh: {
+        docTitle: '英超历年最终排名全景图 (2012–13 至 2025–26)',
+        badgeSub: '2012–13 → 2025–26 · 14 完整赛季',
+        pageTitle: '英超历年最终排名全景图',
+        pageSubtitle: '一图纵览 2012 年以来全部 14 个赛季第 1–20 名轨迹 · 悬停查看积分详情 · 点击任意球队锁定对比',
+        kpiTitlesLabel: '夺冠最多',
+        kpiLatestLabel: '最新冠军 (25–26)',
+        kpiEverLabel: '14 季全勤球队',
+        kpiTitlesSuffix: '冠',
+        kpiPtsSuffix: '分',
+        kpiEverSuffix: '支',
+        modes: {
+          featured: '✨ 视觉聚焦（Big 6 + 奇迹冠军）',
+          all: '🌈 全部 20 队全彩',
+          big6: '⚔️ 仅看 Big 6',
+          champions: '🏆 历届冠军队 (6 队)',
+          darkhorses: '🚀 新贵与黑马'
+        },
+        ranges: {
+          all: '全部 14 季',
+          10: '近 10 季',
+          6: '近 6 季'
+        },
+        uiLangBtn: '🌐 EN',
+        nodeLangEn: '节点标签：英文简称',
+        nodeLangZh: '节点标签：中文简称',
+        themeLight: '☀️ 浅色模式',
+        themeDark: '🌙 深色模式',
+        clearPins: (n) => `清除锁定 (${n})`,
+        pinPrompt: '点击锁定对比：',
+        legendChamp: '第 1 名 · 冠军',
+        legendUcl: '第 1–4 名 · 欧冠区',
+        legendUel: '第 5–6 名 · 欧战区',
+        legendRel: '第 18–20 名 · 降级区',
+        legendReturn: '降级后重返英超',
+        chartAria: '英超历年排名走势图',
+        drawerTitle: '2012–26 历届冠军与高光时刻',
+        drawerSubtitle: '点击上方任意球队标签或图中节点，可在此查看该队 14 赛季完整排名曲线与统计摘要',
+        champTip: (season, clubName, pts) => `${season} 冠军：${clubName} (${pts}分)`,
+        cardTitles: '冠军',
+        cardBest: '最高排名',
+        cardAvg: '平均排名',
+        cardRel: '在籍/降级',
+        statusHover: (club) => `正在预览：${club.zh} (${club.name})`,
+        statusPinned: (names) => `已锁定对比：${names}`,
+        modeStatus: {
+          featured: '视觉聚焦模式（Big 6 + 莱斯特城高亮，其余球队清晰可读）',
+          all: '全彩模式（全部 20 队轨迹高亮）',
+          big6: 'Big 6 争冠轨迹对比',
+          champions: '2012 年以来 6 支英超冠军队',
+          darkhorses: '英超新贵与黑马轨迹'
+        },
+        tipBaseline: '首季基准',
+        tipPromoted: '▲ 升班马',
+        tipUp: (d) => `▲ 上升 ${d} 名`,
+        tipDown: (d) => `▼ 下降 ${d} 名`,
+        tipSame: '● 排名持平',
+        badgeChamp: '🏆 冠军',
+        badgeUcl: '欧冠区',
+        badgeRel: '降级',
+        tipSeason: '赛季',
+        tipRank: '最终排名',
+        tipPts: '最终积分',
+        tipYoY: '较上季：',
+        tipAvg: (v) => `14季均排 #${v}`,
+        tipClickPin: '点击可锁定对比该队完整曲线',
+        tipClickUnpin: '点击可取消锁定该队完整曲线'
+      },
+      en: {
+        docTitle: 'Premier League Final Standings Panorama (2012–13 to 2025–26)',
+        badgeSub: '2012–13 → 2025–26 · 14 Full Seasons',
+        pageTitle: 'Premier League Final Standings Panorama',
+        pageSubtitle: '14 seasons of 1st–20th finish trajectories since 2012 · Hover for points & YoY delta · Click any club to pin & compare',
+        kpiTitlesLabel: 'Most Titles',
+        kpiLatestLabel: 'Latest Champion (25–26)',
+        kpiEverLabel: 'Ever-Present (14 Seasons)',
+        kpiTitlesSuffix: 'Titles',
+        kpiPtsSuffix: 'pts',
+        kpiEverSuffix: 'Clubs',
+        modes: {
+          featured: '✨ Featured (Big 6 + Leicester)',
+          all: '🌈 All 20 Clubs',
+          big6: '⚔️ Big 6 Only',
+          champions: '🏆 Champions (6 Clubs)',
+          darkhorses: '🚀 Rising & Dark Horses'
+        },
+        ranges: {
+          all: 'All 14 Seasons',
+          10: 'Last 10',
+          6: 'Last 6'
+        },
+        uiLangBtn: '🌐 中文',
+        nodeLangEn: 'Node Labels: Code',
+        nodeLangZh: 'Node Labels: 中文',
+        themeLight: '☀️ Light',
+        themeDark: '🌙 Dark',
+        clearPins: (n) => `Clear Pins (${n})`,
+        pinPrompt: 'Pin to compare:',
+        legendChamp: '1st · Champion',
+        legendUcl: '1st–4th · UCL',
+        legendUel: '5th–6th · Europa',
+        legendRel: '18th–20th · Relegation',
+        legendReturn: 'Returned after relegation',
+        chartAria: 'Premier League Final Standings Bump Chart',
+        drawerTitle: '2012–26 Champions & Club History',
+        drawerSubtitle: 'Click any club chip above or chart node to inspect its 14-season trajectory & stats here',
+        champTip: (season, clubName, pts) => `${season} Champion: ${clubName} (${pts} pts)`,
+        cardTitles: 'Titles',
+        cardBest: 'Best',
+        cardAvg: 'Avg Rank',
+        cardRel: 'Seasons/Rel.',
+        statusHover: (club) => `Previewing: ${club.name}`,
+        statusPinned: (names) => `Pinned: ${names}`,
+        modeStatus: {
+          featured: 'Featured Mode (Big 6 + Leicester highlighted, others legible)',
+          all: 'Full Color Mode (All 20 clubs highlighted)',
+          big6: 'Big 6 Title Race Comparison',
+          champions: '6 Premier League Champions Since 2012',
+          darkhorses: 'Rising Challengers & Dark Horses'
+        },
+        tipBaseline: 'Baseline season',
+        tipPromoted: '▲ Promoted',
+        tipUp: (d) => `▲ Up ${d}`,
+        tipDown: (d) => `▼ Down ${d}`,
+        tipSame: '● Unchanged',
+        badgeChamp: '🏆 Champion',
+        badgeUcl: 'UCL',
+        badgeRel: 'Relegated',
+        tipSeason: 'Season',
+        tipRank: 'Rank',
+        tipPts: 'Points',
+        tipYoY: 'YoY:',
+        tipAvg: (v) => `14-yr Avg #${v}`,
+        tipClickPin: 'Click to pin full trajectory',
+        tipClickUnpin: 'Click to unpin full trajectory'
+      }
+    };
+
+    function t() {
+      return I18N[uiLang];
+    }
+
+    function getClubDisplayName(code, short = false) {
+      const club = CLUBS[code];
+      if (uiLang === 'zh') return short ? club.shortZh : club.zh;
+      return short ? club.shortEn : club.name;
+    }
+
+    function getClubLogoUrl(code) {
+      const club = CLUBS[code];
+      return `https://a.espncdn.com/i/teamlogos/soccer/500/${club.espnId}.png`;
+    }
+
+    function getClubFallbackSvg(code) {
+      const club = CLUBS[code];
+      const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="${club.color}"/><text x="12" y="15.5" text-anchor="middle" font-size="8.5" font-family="Arial,sans-serif" font-weight="bold" fill="#fff">${code}</text></svg>`;
+      return `data:image/svg+xml;utf8,${encodeURIComponent(svgStr)}`;
+    }
+
+    function clubLogoImg(code, sizeClass = 'w-4 h-4') {
+      const club = CLUBS[code];
+      const url = getClubLogoUrl(code);
+      const fallback = getClubFallbackSvg(code);
+      return `<img src="${url}" alt="${club.name} logo" class="${sizeClass} object-contain shrink-0 inline-block select-none" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'" />`;
+    }
+
+    function applyStaticTranslations() {
+      const tr = t();
+      document.documentElement.lang = uiLang === 'zh' ? 'zh-CN' : 'en';
+      document.title = tr.docTitle;
+      document.getElementById('header-badge-sub').textContent = tr.badgeSub;
+      document.getElementById('page-title').textContent = tr.pageTitle;
+      document.getElementById('page-subtitle').textContent = tr.pageSubtitle;
+
+      document.getElementById('kpi-titles-label').textContent = tr.kpiTitlesLabel;
+      document.getElementById('kpi-titles-val').innerHTML = `
+        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#38BDF8"></span>
+        <span>${getClubDisplayName('MCI', true)}</span>
+        ${clubLogoImg('MCI', 'w-4 h-4')}
+        <span class="font-mono text-[var(--primary)]">7</span>
+        <span class="text-xs sm:text-sm font-semibold">${tr.kpiTitlesSuffix}</span>
+      `;
+
+      document.getElementById('kpi-latest-label').textContent = tr.kpiLatestLabel;
+      document.getElementById('kpi-latest-val').innerHTML = `
+        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
+        <span>${getClubDisplayName('ARS', true)}</span>
+        ${clubLogoImg('ARS', 'w-4 h-4')}
+        <span class="font-mono text-xs sm:text-sm">85${uiLang === 'zh' ? tr.kpiPtsSuffix : ' ' + tr.kpiPtsSuffix}</span>
+      `;
+
+      document.getElementById('kpi-ever-label').textContent = tr.kpiEverLabel;
+      document.getElementById('ever-present-count').textContent = `${everPresent.length} ${tr.kpiEverSuffix}`;
+
+      document.querySelectorAll('#mode-buttons button').forEach(btn => {
+        btn.textContent = tr.modes[btn.dataset.mode];
+      });
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.textContent = tr.ranges[btn.dataset.range];
+      });
+
+      document.getElementById('pin-prompt').textContent = tr.pinPrompt;
+      document.getElementById('legend-champ').textContent = tr.legendChamp;
+      document.getElementById('legend-ucl').textContent = tr.legendUcl;
+      document.getElementById('legend-uel').textContent = tr.legendUel;
+      document.getElementById('legend-rel').textContent = tr.legendRel;
+      document.getElementById('legend-return').textContent = tr.legendReturn;
+      document.getElementById('bump-chart').setAttribute('aria-label', tr.chartAria);
+      document.getElementById('drawer-title').textContent = tr.drawerTitle;
+      document.getElementById('drawer-subtitle').textContent = tr.drawerSubtitle;
+    }
 
     const BIG6 = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT']);
     const CHAMPIONS = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'LEI']);
@@ -467,6 +678,7 @@
 
     // Build quick club chips
     function renderClubChips() {
+      const tr = t();
       const container = document.getElementById('club-chips');
       container.innerHTML = '';
       CHIP_ORDER.forEach(code => {
@@ -483,7 +695,7 @@
           btn.style.borderColor = 'var(--border)';
           btn.style.color = 'var(--foreground)';
         }
-        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${isPinned ? '#fff' : club.color}"></span>${club.zh}`;
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full shrink-0" style="background:${isPinned ? '#fff' : club.color}"></span><span>${getClubDisplayName(code, true)}</span>${clubLogoImg(code, 'w-3.5 h-3.5')}`;
         btn.addEventListener('click', () => togglePin(code));
         btn.addEventListener('mouseenter', () => {
           hoveredTeam = code;
@@ -499,7 +711,7 @@
       const clearBtn = document.getElementById('clear-pins');
       if (pinnedTeams.size > 0) {
         clearBtn.classList.remove('hidden');
-        clearBtn.textContent = `清除锁定 (${pinnedTeams.size})`;
+        clearBtn.textContent = tr.clearPins(pinnedTeams.size);
       } else {
         clearBtn.classList.add('hidden');
       }
@@ -507,18 +719,21 @@
 
     // Render champions timeline badges
     function renderChampionsTimeline() {
+      const tr = t();
       const container = document.getElementById('champions-timeline');
       container.innerHTML = '';
       SEASONS.forEach(s => {
         const [champCode, pts] = s.table[0];
         const club = CLUBS[champCode];
+        const clubName = getClubDisplayName(champCode, true);
         const chip = document.createElement('button');
         chip.className = 'pill-btn inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs border border-[var(--border)] bg-[var(--background)]';
-        chip.title = `${s.label} 冠军：${club.zh} (${pts}分)`;
+        chip.title = tr.champTip(s.label, clubName, pts);
         chip.innerHTML = `
           <span class="font-mono text-[11px] text-[var(--muted-foreground)]">${s.id}</span>
-          <span class="w-2 h-2 rounded-full" style="background:${club.color}"></span>
-          <span class="font-semibold">${club.shortZh}</span>
+          <span class="w-2 h-2 rounded-full shrink-0" style="background:${club.color}"></span>
+          <span class="font-semibold">${clubName}</span>
+          ${clubLogoImg(champCode, 'w-3.5 h-3.5')}
         `;
         chip.addEventListener('click', () => togglePin(champCode));
         container.appendChild(chip);
@@ -526,6 +741,7 @@
     }
 
     function renderPinnedCards() {
+      const tr = t();
       const box = document.getElementById('pinned-cards');
       if (pinnedTeams.size === 0) {
         box.classList.add('hidden');
@@ -540,30 +756,33 @@
         const h = clubHistory[code];
         const card = document.createElement('div');
         card.className = 'rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 flex flex-col gap-2';
+        const primaryName = uiLang === 'zh' ? club.zh : club.name;
+        const secondaryName = uiLang === 'zh' ? club.name : club.zh;
         card.innerHTML = `
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full" style="background:${club.color}"></span>
-              <span class="font-bold text-sm">${club.zh}</span>
-              <span class="text-xs text-[var(--muted-foreground)]">${club.name}</span>
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-3 h-3 rounded-full shrink-0" style="background:${club.color}"></span>
+              <span class="font-bold text-sm truncate">${primaryName}</span>
+              ${clubLogoImg(code, 'w-5 h-5')}
+              <span class="text-xs text-[var(--muted-foreground)] truncate">${secondaryName}</span>
             </div>
-            <button data-unpin="${code}" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded cursor-pointer">✕</button>
+            <button data-unpin="${code}" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded cursor-pointer shrink-0">✕</button>
           </div>
           <div class="grid grid-cols-4 gap-2 text-center">
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">冠军</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardTitles}</div>
               <div class="font-mono font-bold text-sm">${h.titles}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">最高排名</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardBest}</div>
               <div class="font-mono font-bold text-sm">#${h.best}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">平均排名</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardAvg}</div>
               <div class="font-mono font-bold text-sm">${h.avgRank.toFixed(1)}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">在籍/降级</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardRel}</div>
               <div class="font-mono font-bold text-sm">${h.seasons.length}/${h.relegations}</div>
             </div>
           </div>
@@ -594,6 +813,7 @@
 
     // Update mode & range buttons styling
     function updateControlButtons() {
+      const tr = t();
       document.querySelectorAll('#mode-buttons button').forEach(btn => {
         const active = btn.dataset.mode === currentMode;
         if (active) {
@@ -618,11 +838,12 @@
         }
       });
 
+      document.getElementById('toggle-ui-lang').textContent = tr.uiLangBtn;
       document.getElementById('toggle-lang').textContent =
-        labelLang === 'en' ? '节点标签：英文简称' : '节点标签：中文简称';
+        labelLang === 'en' ? tr.nodeLangEn : tr.nodeLangZh;
 
       document.getElementById('toggle-theme').textContent =
-        isLightTheme() ? '🌙 深色模式' : '☀️ 浅色模式';
+        isLightTheme() ? tr.themeDark : tr.themeLight;
     }
 
     // =========================================================================
@@ -635,7 +856,7 @@
       const numRanks = 20;
 
       const padLeft = 58;
-      const padRight = 104;
+      const padRight = 152;
       const padTop = 44;
       const padBottom = 34;
 
@@ -881,13 +1102,12 @@
         });
       });
 
-      // 6. Right-side 2025-26 Final Season Club Names
+      // 6. Right-side 2025-26 Final Season Club Names + Logo + Points
       const lastSeason = seasons[numSeasons - 1];
       const rightX = xOf(numSeasons - 1) + 28;
       lastSeason.table.forEach(([code, pts], idx) => {
         const rank = idx + 1;
         const y = yOf(rank);
-        const club = CLUBS[code];
         const gLabel = el('g', {
           class: 'team-node right-label',
           'data-team': code
@@ -900,7 +1120,32 @@
           'font-size': '11.5',
           'font-weight': rank <= 4 ? '700' : '500'
         }, gLabel);
-        lbl.textContent = `${club.shortZh} · ${pts}`;
+        lbl.textContent = getClubDisplayName(code, true);
+
+        const textWidth = lbl.getComputedTextLength();
+        const logoX = rightX + textWidth + 5;
+        const logoSize = 15;
+        const img = el('image', {
+          x: logoX,
+          y: y - logoSize / 2,
+          width: logoSize,
+          height: logoSize,
+          href: getClubLogoUrl(code),
+          preserveAspectRatio: 'xMidYMid meet'
+        }, gLabel);
+        img.addEventListener('error', () => {
+          img.setAttribute('href', getClubFallbackSvg(code));
+        }, { once: true });
+
+        const ptsLbl = el('text', {
+          x: logoX + logoSize + 4,
+          y: y + 4,
+          fill: muted,
+          'font-size': '11',
+          'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace',
+          'font-weight': rank <= 4 ? '700' : '500'
+        }, gLabel);
+        ptsLbl.textContent = `· ${pts}`;
 
         gLabel.addEventListener('mouseenter', (ev) => {
           hoveredTeam = code;
@@ -920,6 +1165,7 @@
     }
 
     function updateHighlights() {
+      const tr = t();
       const light = isLightTheme();
       const neutralFill = light ? '#cbd5e1' : '#334155';
       const neutralText = light ? '#334155' : '#cbd5e1';
@@ -978,18 +1224,11 @@
 
       const statusEl = document.getElementById('active-status');
       if (hoveredTeam) {
-        statusEl.textContent = `正在预览：${CLUBS[hoveredTeam].zh} (${CLUBS[hoveredTeam].name})`;
+        statusEl.textContent = tr.statusHover(CLUBS[hoveredTeam]);
       } else if (pinnedTeams.size > 0) {
-        statusEl.textContent = `已锁定对比：${[...pinnedTeams].map(c => CLUBS[c].zh).join(' · ')}`;
+        statusEl.textContent = tr.statusPinned([...pinnedTeams].map(c => getClubDisplayName(c, true)).join(' · '));
       } else {
-        const modeNames = {
-          featured: '视觉聚焦模式（Big 6 + 莱斯特城高亮，其余球队清晰可读）',
-          all: '全彩模式（全部 20 队轨迹高亮）',
-          big6: 'Big 6 争冠轨迹对比',
-          champions: '2012 年以来 6 支英超冠军队',
-          darkhorses: '英超新贵与黑马轨迹'
-        };
-        statusEl.textContent = modeNames[currentMode];
+        statusEl.textContent = tr.modeStatus[currentMode];
       }
     }
 
@@ -997,6 +1236,7 @@
     // Tooltip
     // =========================================================================
     function showTooltip(ev, code, sIdx, seasons) {
+      const tr = t();
       const tip = document.getElementById('tooltip');
       const club = CLUBS[code];
       const s = seasons[sIdx];
@@ -1008,59 +1248,65 @@
       const h = clubHistory[code];
 
       const fullIdx = SEASONS.findIndex(x => x.id === s.id);
-      let deltaHtml = '<span class="text-[var(--muted-foreground)]">首季基准</span>';
+      let deltaHtml = `<span class="text-[var(--muted-foreground)]">${tr.tipBaseline}</span>`;
       if (fullIdx > 0) {
         const prevSeason = SEASONS[fullIdx - 1];
         const prevPos = prevSeason.table.findIndex(([c]) => c === code);
         if (prevPos === -1) {
-          deltaHtml = '<span style="color:#10B981;font-weight:600">▲ 升班马</span>';
+          deltaHtml = `<span style="color:#10B981;font-weight:600">${tr.tipPromoted}</span>`;
         } else {
           const diff = (prevPos + 1) - rank;
-          if (diff > 0) deltaHtml = `<span style="color:#10B981;font-weight:600">▲ 上升 ${diff} 名</span>`;
-          else if (diff < 0) deltaHtml = `<span style="color:#EF4444;font-weight:600">▼ 下降 ${Math.abs(diff)} 名</span>`;
-          else deltaHtml = `<span class="text-[var(--muted-foreground)]">● 排名持平</span>`;
+          if (diff > 0) deltaHtml = `<span style="color:#10B981;font-weight:600">${tr.tipUp(diff)}</span>`;
+          else if (diff < 0) deltaHtml = `<span style="color:#EF4444;font-weight:600">${tr.tipDown(Math.abs(diff))}</span>`;
+          else deltaHtml = `<span class="text-[var(--muted-foreground)]">${tr.tipSame}</span>`;
         }
       }
 
       const badge = rank === 1
-        ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">🏆 冠军</span>'
+        ? `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">${tr.badgeChamp}</span>`
         : rank <= 4
-          ? '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-semibold">欧冠区</span>'
+          ? `<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-semibold">${tr.badgeUcl}</span>`
           : rank >= 18
-            ? '<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 font-semibold">降级</span>'
+            ? `<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 font-semibold">${tr.badgeRel}</span>`
             : '';
+
+      const primaryName = uiLang === 'zh' ? club.zh : club.name;
+      const secondaryName = uiLang === 'zh' ? club.name : club.zh;
 
       tip.innerHTML = `
         <div class="flex items-center justify-between gap-3 mb-2">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full shrink-0" style="background:${club.color}"></span>
             <div>
-              <div class="font-bold text-sm text-[var(--foreground)] leading-tight">${club.zh}</div>
-              <div class="text-[11px] text-[var(--muted-foreground)]">${club.name}</div>
+              <div class="font-bold text-sm text-[var(--foreground)] leading-tight flex items-center gap-1.5">
+                <span>${primaryName}</span>
+                ${clubLogoImg(code, 'w-4 h-4')}
+              </div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${secondaryName}</div>
             </div>
           </div>
           ${badge}
         </div>
         <div class="grid grid-cols-3 gap-1.5 py-2 border-y border-[var(--border)] text-center">
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">赛季</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipSeason}</div>
             <div class="font-mono font-bold">${s.label}</div>
           </div>
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">最终排名</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipRank}</div>
             <div class="font-mono font-bold text-sm">#${rank}</div>
           </div>
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">最终积分</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipPts}</div>
             <div class="font-mono font-bold text-sm">${pts}</div>
           </div>
         </div>
         <div class="flex items-center justify-between mt-2 text-[11px]">
-          <span>较上季：${deltaHtml}</span>
-          <span class="text-[var(--muted-foreground)]">14季均排 #${h.avgRank.toFixed(1)}</span>
+          <span>${tr.tipYoY} ${deltaHtml}</span>
+          <span class="text-[var(--muted-foreground)]">${tr.tipAvg(h.avgRank.toFixed(1))}</span>
         </div>
         <div class="mt-1.5 text-[10px] text-[var(--muted-foreground)]">
-          点击可${pinnedTeams.has(code) ? '取消锁定' : '锁定对比'}该队完整曲线
+          ${pinnedTeams.has(code) ? tr.tipClickUnpin : tr.tipClickPin}
         </div>
       `;
 
@@ -1107,6 +1353,18 @@
       });
     });
 
+    document.getElementById('toggle-ui-lang').addEventListener('click', () => {
+      uiLang = uiLang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('pl_ui_lang', uiLang);
+      if (uiLang === 'en') labelLang = 'en';
+      applyStaticTranslations();
+      updateControlButtons();
+      renderClubChips();
+      renderChampionsTimeline();
+      renderPinnedCards();
+      renderChart();
+    });
+
     document.getElementById('toggle-lang').addEventListener('click', () => {
       labelLang = labelLang === 'en' ? 'zh' : 'en';
       updateControlButtons();
@@ -1128,6 +1386,7 @@
     });
 
     // Initial render
+    applyStaticTranslations();
     updateControlButtons();
     renderClubChips();
     renderChampionsTimeline();
