@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>英超历年最终排名全景图 (2012–13 至 2025–26)</title>
+  <title>英超历年排名全景图 (2012–13 至 2026–27 进行中)</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     :root {
@@ -64,45 +64,65 @@
     #tooltip {
       pointer-events: none;
       transition: opacity 0.12s ease, transform 0.12s ease;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
+    }
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    .live-dot {
+      animation: livePulse 1.8s ease-in-out infinite;
     }
   </style>
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen">
-  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-5 space-y-4">
+  <div class="max-w-[1520px] mx-auto px-4 sm:px-6 py-5 space-y-4">
     <!-- Header -->
-    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+    <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
       <div>
-        <div class="flex flex-wrap items-center gap-2.5 mb-1.5">
+        <div class="flex flex-wrap items-center gap-2 mb-1">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] tracking-wide">
             PREMIER LEAGUE
           </span>
-          <span id="header-badge-sub" class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 · 14 完整赛季</span>
-          <div class="inline-flex items-center rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5 text-xs shadow-sm" role="group" aria-label="Language switch">
-            <button data-uilang="zh" class="uilang-btn px-2.5 py-0.5 rounded-md font-semibold cursor-pointer transition-colors">中文</button>
-            <button data-uilang="en" class="uilang-btn px-2.5 py-0.5 rounded-md font-semibold cursor-pointer transition-colors">English</button>
-          </div>
+          <span class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 (14 完结季) + 2026–27 进行中</span>
+          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 live-dot"></span>
+            LIVE · 截至 2026-11-21
+          </span>
         </div>
-        <h1 id="page-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
           英超历年最终排名全景图
         </h1>
-        <p id="page-subtitle" class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
-          一图纵览 2012 年以来全部 14 个赛季第 1–20 名轨迹 · 悬停查看积分详情 · 点击任意球队锁定对比
+        <p class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
+          悬停任意节点查看完整战绩（MP / 胜平负 / 进失球 / 净胜球 / 近5场）· 点击球队锁定对比多队轨迹
         </p>
       </div>
 
       <!-- Quick KPI Cards -->
-      <div class="grid grid-cols-3 gap-2.5 shrink-0">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div id="kpi-titles-label" class="text-xs text-[var(--muted-foreground)]">夺冠最多</div>
-          <div id="kpi-titles-val" class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5"></div>
+          <div class="text-xs text-[var(--muted-foreground)]">夺冠最多 (12–26)</div>
+          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#38BDF8"></span>
+            <span>曼城 <span class="font-mono text-[var(--primary)]">7</span> 冠</span>
+          </div>
         </div>
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div id="kpi-latest-label" class="text-xs text-[var(--muted-foreground)]">最新冠军 (25–26)</div>
-          <div id="kpi-latest-val" class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5"></div>
+          <div class="text-xs text-[var(--muted-foreground)]">卫冕冠军 (25–26)</div>
+          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
+            <span>阿森纳 <span class="font-mono">85分</span></span>
+          </div>
         </div>
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
-          <div id="kpi-ever-label" class="text-xs text-[var(--muted-foreground)]">14 季全勤球队</div>
+          <div class="text-xs text-[var(--muted-foreground)]">26–27 当前榜首</div>
+          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
+            <span>阿森纳 <span class="font-mono text-emerald-400">28分</span></span>
+          </div>
+        </div>
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
+          <div class="text-xs text-[var(--muted-foreground)]">14 季全勤球队</div>
           <div id="ever-present-count" class="text-sm sm:text-base font-bold mt-0.5 font-mono">—</div>
         </div>
       </div>
@@ -130,13 +150,17 @@
           </button>
         </div>
 
-        <!-- Right Controls: Season Range, Labels, UI Lang & Theme -->
+        <!-- Right Controls -->
         <div class="flex flex-wrap items-center gap-2">
           <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--background)] p-0.5 text-xs">
-            <button data-range="all" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">全部 14 季</button>
+            <button data-range="all" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">全部赛季</button>
             <button data-range="10" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 10 季</button>
             <button data-range="6" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 6 季</button>
           </div>
+          <button id="toggle-live" class="pill-btn inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            含 26–27 进行中
+          </button>
           <button id="toggle-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
             节点标签：英文简称
           </button>
@@ -151,7 +175,7 @@
 
       <!-- Quick Club Selector -->
       <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)] overflow-x-auto chart-scroll pb-1">
-        <span id="pin-prompt" class="text-xs text-[var(--muted-foreground)] shrink-0 font-medium">点击锁定对比：</span>
+        <span class="text-xs text-[var(--muted-foreground)] shrink-0 font-medium">点击锁定对比：</span>
         <div id="club-chips" class="flex items-center gap-1.5 shrink-0"></div>
       </div>
     </div>
@@ -163,23 +187,23 @@
         <div class="flex flex-wrap items-center gap-4">
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(245,158,11,0.28);border:1px solid #F59E0B"></span>
-            <span id="legend-champ">第 1 名 · 冠军</span>
+            第 1 名 · 冠军/榜首
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(16,185,129,0.16);border:1px solid #10B981"></span>
-            <span id="legend-ucl">第 1–4 名 · 欧冠区</span>
+            第 1–4 名 · 欧冠区
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(59,130,246,0.14);border:1px solid #3B82F6"></span>
-            <span id="legend-uel">第 5–6 名 · 欧战区</span>
+            第 5–6 名 · 欧战区
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(239,68,68,0.16);border:1px solid #EF4444"></span>
-            <span id="legend-rel">第 18–20 名 · 降级区</span>
+            第 18–20 名 · 降级区
           </span>
           <span class="inline-flex items-center gap-1.5">
             <span class="w-5 border-t-2 border-dashed border-[var(--muted-foreground)] inline-block"></span>
-            <span id="legend-return">降级后重返英超</span>
+            重返英超 / 26–27 进行中
           </span>
         </div>
         <div id="active-status" class="text-xs font-medium text-[var(--foreground)]"></div>
@@ -187,7 +211,7 @@
 
       <!-- SVG Container -->
       <div class="w-full overflow-x-auto chart-scroll">
-        <svg id="bump-chart" class="block select-none" role="img" aria-label="Premier League Standings Chart"></svg>
+        <svg id="bump-chart" class="block select-none" role="img" aria-label="英超历年排名走势图"></svg>
       </div>
     </div>
 
@@ -195,9 +219,9 @@
     <div id="team-summary-bar" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <h2 id="drawer-title" class="text-sm font-semibold text-[var(--foreground)]">2012–26 历届冠军与高光时刻</h2>
-          <p id="drawer-subtitle" class="text-xs text-[var(--muted-foreground)] mt-0.5">
-            点击上方任意球队标签或图中节点，可在此查看该队 14 赛季完整排名曲线与统计摘要
+          <h2 class="text-sm font-semibold text-[var(--foreground)]">2012–26 历届冠军与高光时刻</h2>
+          <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+            点击上方任意球队标签或图中节点，可在此展开该队完整排名曲线、历史战绩与 26–27 实时状态
           </p>
         </div>
         <div id="champions-timeline" class="flex flex-wrap gap-1.5"></div>
@@ -207,187 +231,259 @@
   </div>
 
   <!-- Floating Tooltip -->
-  <div id="tooltip" class="fixed z-50 hidden min-w-[210px] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-xl p-3 text-xs"></div>
+  <div id="tooltip" class="fixed z-50 hidden min-w-[245px] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-2xl p-3 text-xs"></div>
 
   <script>
     // =========================================================================
-    // Verified Premier League Final Standings Data (2012-13 through 2025-26)
+    // Premier League Clubs Metadata
     // =========================================================================
     const CLUBS = {
-      MCI: { name: 'Manchester City', shortEn: 'Man City', zh: '曼城', shortZh: '曼城', color: '#38BDF8', tier: 'big6', espnId: 382 },
-      ARS: { name: 'Arsenal', shortEn: 'Arsenal', zh: '阿森纳', shortZh: '阿森纳', color: '#EF4444', tier: 'big6', espnId: 359 },
-      LIV: { name: 'Liverpool', shortEn: 'Liverpool', zh: '利物浦', shortZh: '利物浦', color: '#E11D48', tier: 'big6', espnId: 364 },
-      CHE: { name: 'Chelsea', shortEn: 'Chelsea', zh: '切尔西', shortZh: '切尔西', color: '#2563EB', tier: 'big6', espnId: 363 },
-      MUN: { name: 'Manchester United', shortEn: 'Man Utd', zh: '曼联', shortZh: '曼联', color: '#F97316', tier: 'big6', espnId: 360 },
-      TOT: { name: 'Tottenham Hotspur', shortEn: 'Tottenham', zh: '热刺', shortZh: '热刺', color: '#8B5CF6', tier: 'big6', espnId: 367 },
-      LEI: { name: 'Leicester City', shortEn: 'Leicester', zh: '莱斯特城', shortZh: '莱斯特', color: '#06B6D4', tier: 'champ', espnId: 375 },
-      AVL: { name: 'Aston Villa', shortEn: 'Aston Villa', zh: '阿斯顿维拉', shortZh: '维拉', color: '#A855F7', tier: 'horse', espnId: 362 },
-      NEW: { name: 'Newcastle United', shortEn: 'Newcastle', zh: '纽卡斯尔', shortZh: '纽卡', color: '#14B8A6', tier: 'horse', espnId: 361 },
-      BHA: { name: 'Brighton & Hove Albion', shortEn: 'Brighton', zh: '布莱顿', shortZh: '布莱顿', color: '#0EA5E9', tier: 'horse', espnId: 331 },
-      NFO: { name: 'Nottingham Forest', shortEn: 'Nottm Forest', zh: '诺丁汉森林', shortZh: '森林', color: '#EC4899', tier: 'horse', espnId: 393 },
-      BOU: { name: 'AFC Bournemouth', shortEn: 'Bournemouth', zh: '伯恩茅斯', shortZh: '樱桃', color: '#DC2626', tier: 'horse', espnId: 349 },
-      EVE: { name: 'Everton', shortEn: 'Everton', zh: '埃弗顿', shortZh: '埃弗顿', color: '#3B82F6', tier: 'mid', espnId: 368 },
-      WHU: { name: 'West Ham United', shortEn: 'West Ham', zh: '西汉姆联', shortZh: '西汉姆', color: '#BE185D', tier: 'mid', espnId: 371 },
-      CRY: { name: 'Crystal Palace', shortEn: 'Crystal Palace', zh: '水晶宫', shortZh: '水晶宫', color: '#6366F1', tier: 'mid', espnId: 384 },
-      WOL: { name: 'Wolverhampton Wanderers', shortEn: 'Wolves', zh: '狼队', shortZh: '狼队', color: '#F59E0B', tier: 'mid', espnId: 380 },
-      FUL: { name: 'Fulham', shortEn: 'Fulham', zh: '富勒姆', shortZh: '富勒姆', color: '#64748B', tier: 'mid', espnId: 370 },
-      BRE: { name: 'Brentford', shortEn: 'Brentford', zh: '布伦特福德', shortZh: '小蜜蜂', color: '#FB7185', tier: 'horse', espnId: 337 },
-      SOU: { name: 'Southampton', shortEn: 'Southampton', zh: '南安普顿', shortZh: '圣徒', color: '#F43F5E', tier: 'mid', espnId: 376 },
-      BUR: { name: 'Burnley', shortEn: 'Burnley', zh: '伯恩利', shortZh: '伯恩利', color: '#9D174D', tier: 'mid', espnId: 379 },
-      SUN: { name: 'Sunderland', shortEn: 'Sunderland', zh: '桑德兰', shortZh: '桑德兰', color: '#FB923C', tier: 'horse', espnId: 366 },
-      LEE: { name: 'Leeds United', shortEn: 'Leeds', zh: '利兹联', shortZh: '利兹联', color: '#EAB308', tier: 'mid', espnId: 357 },
-      STK: { name: 'Stoke City', shortEn: 'Stoke', zh: '斯托克城', shortZh: '斯托克', color: '#94A3B8', tier: 'other', espnId: 336 },
-      SWA: { name: 'Swansea City', shortEn: 'Swansea', zh: '斯旺西', shortZh: '斯旺西', color: '#94A3B8', tier: 'other', espnId: 318 },
-      WBA: { name: 'West Bromwich Albion', shortEn: 'West Brom', zh: '西布朗', shortZh: '西布朗', color: '#64748B', tier: 'other', espnId: 383 },
-      WAT: { name: 'Watford', shortEn: 'Watford', zh: '沃特福德', shortZh: '沃特福', color: '#D97706', tier: 'other', espnId: 395 },
-      NOR: { name: 'Norwich City', shortEn: 'Norwich', zh: '诺维奇', shortZh: '诺维奇', color: '#84CC16', tier: 'other', espnId: 381 },
-      SHU: { name: 'Sheffield United', shortEn: 'Sheff Utd', zh: '谢菲尔德联', shortZh: '谢菲联', color: '#F87171', tier: 'other', espnId: 398 },
-      HUL: { name: 'Hull City', shortEn: 'Hull', zh: '赫尔城', shortZh: '赫尔城', color: '#F59E0B', tier: 'other', espnId: 306 },
-      QPR: { name: 'Queens Park Rangers', shortEn: 'QPR', zh: '女王公园巡游者', shortZh: 'QPR', color: '#60A5FA', tier: 'other', espnId: 334 },
-      CAR: { name: 'Cardiff City', shortEn: 'Cardiff', zh: '卡迪夫城', shortZh: '卡迪夫', color: '#38BDF8', tier: 'other', espnId: 347 },
-      HUD: { name: 'Huddersfield Town', shortEn: 'Huddersfield', zh: '哈德斯菲尔德', shortZh: '哈镇', color: '#7DD3FC', tier: 'other', espnId: 335 },
-      WIG: { name: 'Wigan Athletic', shortEn: 'Wigan', zh: '维冈竞技', shortZh: '维冈', color: '#60A5FA', tier: 'other', espnId: 350 },
-      RDG: { name: 'Reading', shortEn: 'Reading', zh: '雷丁', shortZh: '雷丁', color: '#818CF8', tier: 'other', espnId: 338 },
-      MID: { name: 'Middlesbrough', shortEn: 'Middlesbrough', zh: '米德尔斯堡', shortZh: '米堡', color: '#F87171', tier: 'other', espnId: 369 },
-      LUT: { name: 'Luton Town', shortEn: 'Luton', zh: '卢顿', shortZh: '卢顿', color: '#FB923C', tier: 'other', espnId: 301 },
-      IPS: { name: 'Ipswich Town', shortEn: 'Ipswich', zh: '伊普斯维奇', shortZh: '伊镇', color: '#3B82F6', tier: 'other', espnId: 373 }
+      MCI: { name: 'Manchester City', zh: '曼城', shortZh: '曼城', color: '#38BDF8', tier: 'big6' },
+      ARS: { name: 'Arsenal', zh: '阿森纳', shortZh: '阿森纳', color: '#EF4444', tier: 'big6' },
+      LIV: { name: 'Liverpool', zh: '利物浦', shortZh: '利物浦', color: '#E11D48', tier: 'big6' },
+      CHE: { name: 'Chelsea', zh: '切尔西', shortZh: '切尔西', color: '#2563EB', tier: 'big6' },
+      MUN: { name: 'Manchester United', zh: '曼联', shortZh: '曼联', color: '#F97316', tier: 'big6' },
+      TOT: { name: 'Tottenham Hotspur', zh: '热刺', shortZh: '热刺', color: '#8B5CF6', tier: 'big6' },
+      LEI: { name: 'Leicester City', zh: '莱斯特城', shortZh: '莱斯特', color: '#06B6D4', tier: 'champ' },
+      AVL: { name: 'Aston Villa', zh: '阿斯顿维拉', shortZh: '维拉', color: '#A855F7', tier: 'horse' },
+      NEW: { name: 'Newcastle United', zh: '纽卡斯尔', shortZh: '纽卡', color: '#14B8A6', tier: 'horse' },
+      BHA: { name: 'Brighton & Hove Albion', zh: '布莱顿', shortZh: '布莱顿', color: '#0EA5E9', tier: 'horse' },
+      NFO: { name: 'Nottingham Forest', zh: '诺丁汉森林', shortZh: '森林', color: '#EC4899', tier: 'horse' },
+      BOU: { name: 'AFC Bournemouth', zh: '伯恩茅斯', shortZh: '樱桃', color: '#DC2626', tier: 'horse' },
+      EVE: { name: 'Everton', zh: '埃弗顿', shortZh: '埃弗顿', color: '#3B82F6', tier: 'mid' },
+      WHU: { name: 'West Ham United', zh: '西汉姆联', shortZh: '西汉姆', color: '#BE185D', tier: 'mid' },
+      CRY: { name: 'Crystal Palace', zh: '水晶宫', shortZh: '水晶宫', color: '#6366F1', tier: 'mid' },
+      WOL: { name: 'Wolverhampton Wanderers', zh: '狼队', shortZh: '狼队', color: '#F59E0B', tier: 'mid' },
+      FUL: { name: 'Fulham', zh: '富勒姆', shortZh: '富勒姆', color: '#64748B', tier: 'mid' },
+      BRE: { name: 'Brentford', zh: '布伦特福德', shortZh: '小蜜蜂', color: '#FB7185', tier: 'horse' },
+      SOU: { name: 'Southampton', zh: '南安普顿', shortZh: '圣徒', color: '#F43F5E', tier: 'mid' },
+      BUR: { name: 'Burnley', zh: '伯恩利', shortZh: '伯恩利', color: '#9D174D', tier: 'mid' },
+      SUN: { name: 'Sunderland', zh: '桑德兰', shortZh: '桑德兰', color: '#FB923C', tier: 'horse' },
+      LEE: { name: 'Leeds United', zh: '利兹联', shortZh: '利兹联', color: '#EAB308', tier: 'horse' },
+      COV: { name: 'Coventry City', zh: '考文垂', shortZh: '考文垂', color: '#0284C7', tier: 'horse' },
+      STK: { name: 'Stoke City', zh: '斯托克城', shortZh: '斯托克', color: '#94A3B8', tier: 'other' },
+      SWA: { name: 'Swansea City', zh: '斯旺西', shortZh: '斯旺西', color: '#94A3B8', tier: 'other' },
+      WBA: { name: 'West Bromwich Albion', zh: '西布朗', shortZh: '西布朗', color: '#64748B', tier: 'other' },
+      WAT: { name: 'Watford', zh: '沃特福德', shortZh: '沃特福', color: '#D97706', tier: 'other' },
+      NOR: { name: 'Norwich City', zh: '诺维奇', shortZh: '诺维奇', color: '#84CC16', tier: 'other' },
+      SHU: { name: 'Sheffield United', zh: '谢菲尔德联', shortZh: '谢菲联', color: '#F87171', tier: 'other' },
+      HUL: { name: 'Hull City', zh: '赫尔城', shortZh: '赫尔城', color: '#F59E0B', tier: 'other' },
+      QPR: { name: 'Queens Park Rangers', zh: '女王公园巡游者', shortZh: 'QPR', color: '#60A5FA', tier: 'other' },
+      CAR: { name: 'Cardiff City', zh: '卡迪夫城', shortZh: '卡迪夫', color: '#38BDF8', tier: 'other' },
+      HUD: { name: 'Huddersfield Town', zh: '哈德斯菲尔德', shortZh: '哈镇', color: '#7DD3FC', tier: 'other' },
+      WIG: { name: 'Wigan Athletic', zh: '维冈竞技', shortZh: '维冈', color: '#60A5FA', tier: 'other' },
+      RDG: { name: 'Reading', zh: '雷丁', shortZh: '雷丁', color: '#818CF8', tier: 'other' },
+      MID: { name: 'Middlesbrough', zh: '米德尔斯堡', shortZh: '米堡', color: '#F87171', tier: 'other' },
+      LUT: { name: 'Luton Town', zh: '卢顿', shortZh: '卢顿', color: '#FB923C', tier: 'other' },
+      IPS: { name: 'Ipswich Town', zh: '伊普斯维奇', shortZh: '伊镇', color: '#3B82F6', tier: 'other' }
     };
 
+    // Row tuple format: [code, pts, mp, w, d, l, gf, ga, gd, form?]
     const SEASONS = [
       {
         id: '12-13', label: '2012–13',
         table: [
-          ['MUN',89],['MCI',78],['CHE',75],['ARS',73],['TOT',72],
-          ['EVE',63],['LIV',61],['WBA',49],['SWA',46],['WHU',46],
-          ['NOR',44],['FUL',43],['STK',42],['SOU',41],['AVL',41],
-          ['NEW',41],['SUN',39],['WIG',36],['RDG',28],['QPR',25]
+          ['MUN',89,38,28,5,5,86,43,43], ['MCI',78,38,23,9,6,66,34,32], ['CHE',75,38,22,9,7,75,39,36],
+          ['ARS',73,38,21,10,7,72,37,35], ['TOT',72,38,21,9,8,66,46,20], ['EVE',63,38,16,15,7,55,40,15],
+          ['LIV',61,38,16,13,9,71,43,28], ['WBA',49,38,14,7,17,53,57,-4], ['SWA',46,38,11,13,14,47,51,-4],
+          ['WHU',46,38,12,10,16,45,53,-8], ['NOR',44,38,10,14,14,41,58,-17], ['FUL',43,38,11,10,17,50,60,-10],
+          ['STK',42,38,9,15,14,34,45,-11], ['SOU',41,38,9,14,15,49,60,-11], ['AVL',41,38,10,11,17,47,69,-22],
+          ['NEW',41,38,11,8,19,45,68,-23], ['SUN',39,38,9,12,17,41,54,-13], ['WIG',36,38,9,9,20,47,73,-26],
+          ['RDG',28,38,6,10,22,43,73,-30], ['QPR',25,38,4,13,21,30,60,-30]
         ]
       },
       {
         id: '13-14', label: '2013–14',
         table: [
-          ['MCI',86],['LIV',84],['CHE',82],['ARS',79],['EVE',72],
-          ['TOT',69],['MUN',64],['SOU',56],['STK',50],['NEW',49],
-          ['CRY',45],['SWA',42],['WHU',40],['SUN',38],['AVL',38],
-          ['HUL',37],['WBA',36],['NOR',33],['FUL',32],['CAR',30]
+          ['MCI',86,38,27,5,6,102,37,65], ['LIV',84,38,26,6,6,101,50,51], ['CHE',82,38,25,7,6,71,27,44],
+          ['ARS',79,38,24,7,7,68,41,27], ['EVE',72,38,21,9,8,61,39,22], ['TOT',69,38,21,6,11,55,51,4],
+          ['MUN',64,38,19,7,12,64,43,21], ['SOU',56,38,15,11,12,54,46,8], ['STK',50,38,13,11,14,45,52,-7],
+          ['NEW',49,38,15,4,19,43,59,-16], ['CRY',45,38,13,6,19,33,48,-15], ['SWA',42,38,11,9,18,54,54,0],
+          ['WHU',40,38,11,7,20,40,51,-11], ['SUN',38,38,10,8,20,41,60,-19], ['AVL',38,38,10,8,20,39,61,-22],
+          ['HUL',37,38,10,7,21,38,53,-15], ['WBA',36,38,7,15,16,43,59,-16], ['NOR',33,38,8,9,21,28,62,-34],
+          ['FUL',32,38,9,5,24,40,85,-45], ['CAR',30,38,7,9,22,32,74,-42]
         ]
       },
       {
         id: '14-15', label: '2014–15',
         table: [
-          ['CHE',87],['MCI',79],['ARS',75],['MUN',70],['TOT',64],
-          ['LIV',62],['SOU',60],['SWA',56],['STK',54],['CRY',48],
-          ['EVE',47],['WHU',47],['WBA',44],['LEI',41],['NEW',39],
-          ['SUN',38],['AVL',38],['HUL',35],['BUR',33],['QPR',30]
+          ['CHE',87,38,26,9,3,73,32,41], ['MCI',79,38,24,7,7,83,38,45], ['ARS',75,38,22,9,7,71,36,35],
+          ['MUN',70,38,20,10,8,62,37,25], ['TOT',64,38,19,7,12,58,53,5], ['LIV',62,38,18,8,12,52,48,4],
+          ['SOU',60,38,18,6,14,54,33,21], ['SWA',56,38,16,8,14,46,49,-3], ['STK',54,38,15,9,14,48,45,3],
+          ['CRY',48,38,13,9,16,47,51,-4], ['EVE',47,38,12,11,15,48,50,-2], ['WHU',47,38,12,11,15,44,47,-3],
+          ['WBA',44,38,11,11,16,38,51,-13], ['LEI',41,38,11,8,19,46,55,-9], ['NEW',39,38,10,9,19,40,63,-23],
+          ['SUN',38,38,7,17,14,31,53,-22], ['AVL',38,38,10,8,20,31,57,-26], ['HUL',35,38,8,11,19,33,51,-18],
+          ['BUR',33,38,7,12,19,28,53,-25], ['QPR',30,38,8,6,24,42,73,-31]
         ]
       },
       {
         id: '15-16', label: '2015–16',
         table: [
-          ['LEI',81],['ARS',71],['TOT',70],['MCI',66],['MUN',66],
-          ['SOU',63],['WHU',62],['LIV',60],['STK',51],['CHE',50],
-          ['EVE',47],['SWA',47],['WAT',45],['WBA',43],['CRY',42],
-          ['BOU',42],['SUN',39],['NEW',37],['NOR',34],['AVL',17]
+          ['LEI',81,38,23,12,3,68,36,32], ['ARS',71,38,20,11,7,65,36,29], ['TOT',70,38,19,13,6,69,35,34],
+          ['MCI',66,38,19,9,10,71,41,30], ['MUN',66,38,19,9,10,49,35,14], ['SOU',63,38,18,9,11,59,41,18],
+          ['WHU',62,38,16,14,8,65,51,14], ['LIV',60,38,16,12,10,63,50,13], ['STK',51,38,14,9,15,41,55,-14],
+          ['CHE',50,38,12,14,12,59,53,6], ['EVE',47,38,11,14,13,59,55,4], ['SWA',47,38,12,11,15,42,52,-10],
+          ['WAT',45,38,12,9,17,40,50,-10], ['WBA',43,38,10,13,15,34,48,-14], ['CRY',42,38,11,9,18,39,51,-12],
+          ['BOU',42,38,11,9,18,45,67,-22], ['SUN',39,38,9,12,17,48,62,-14], ['NEW',37,38,9,10,19,44,65,-21],
+          ['NOR',34,38,9,7,22,39,67,-28], ['AVL',17,38,3,8,27,27,76,-49]
         ]
       },
       {
         id: '16-17', label: '2016–17',
         table: [
-          ['CHE',93],['TOT',86],['MCI',78],['LIV',76],['ARS',75],
-          ['MUN',69],['EVE',61],['SOU',46],['BOU',46],['WBA',45],
-          ['WHU',45],['LEI',44],['STK',44],['CRY',41],['SWA',41],
-          ['BUR',40],['WAT',40],['HUL',34],['MID',28],['SUN',24]
+          ['CHE',93,38,30,3,5,85,33,52], ['TOT',86,38,26,8,4,86,26,60], ['MCI',78,38,23,9,6,80,39,41],
+          ['LIV',76,38,22,10,6,78,42,36], ['ARS',75,38,23,6,9,77,44,33], ['MUN',69,38,18,15,5,54,29,25],
+          ['EVE',61,38,17,10,11,62,44,18], ['SOU',46,38,12,10,16,41,48,-7], ['BOU',46,38,12,10,16,55,67,-12],
+          ['WBA',45,38,12,9,17,43,51,-8], ['WHU',45,38,12,9,17,47,64,-17], ['LEI',44,38,12,8,18,48,63,-15],
+          ['STK',44,38,11,11,16,41,56,-15], ['CRY',41,38,12,5,21,50,63,-13], ['SWA',41,38,12,5,21,45,70,-25],
+          ['BUR',40,38,11,7,20,39,55,-16], ['WAT',40,38,11,7,20,40,68,-28], ['HUL',34,38,9,7,22,37,80,-43],
+          ['MID',28,38,5,13,20,27,53,-26], ['SUN',24,38,6,6,26,29,69,-40]
         ]
       },
       {
         id: '17-18', label: '2017–18',
         table: [
-          ['MCI',100],['MUN',81],['TOT',77],['LIV',75],['CHE',70],
-          ['ARS',63],['BUR',54],['EVE',49],['LEI',47],['NEW',44],
-          ['CRY',44],['BOU',44],['WHU',42],['WAT',41],['BHA',40],
-          ['HUD',37],['SOU',36],['SWA',33],['STK',33],['WBA',31]
+          ['MCI',100,38,32,4,2,106,27,79], ['MUN',81,38,25,6,7,68,28,40], ['TOT',77,38,23,8,7,74,36,38],
+          ['LIV',75,38,21,12,5,84,38,46], ['CHE',70,38,21,7,10,62,38,24], ['ARS',63,38,19,6,13,74,51,23],
+          ['BUR',54,38,14,12,12,36,39,-3], ['EVE',49,38,13,10,15,44,58,-14], ['LEI',47,38,12,11,15,56,60,-4],
+          ['NEW',44,38,12,8,18,39,47,-8], ['CRY',44,38,11,11,16,45,55,-10], ['BOU',44,38,11,11,16,45,61,-16],
+          ['WHU',42,38,10,12,16,48,68,-20], ['WAT',41,38,11,8,19,44,64,-20], ['BHA',40,38,9,13,16,34,54,-20],
+          ['HUD',37,38,9,10,19,28,58,-30], ['SOU',36,38,7,15,16,37,56,-19], ['SWA',33,38,8,9,21,28,56,-28],
+          ['STK',33,38,7,12,19,35,68,-33], ['WBA',31,38,6,13,19,31,56,-25]
         ]
       },
       {
         id: '18-19', label: '2018–19',
         table: [
-          ['MCI',98],['LIV',97],['CHE',72],['TOT',71],['ARS',70],
-          ['MUN',66],['WOL',57],['EVE',54],['LEI',52],['WHU',52],
-          ['WAT',50],['CRY',49],['NEW',45],['BOU',45],['BUR',40],
-          ['SOU',39],['BHA',36],['CAR',34],['FUL',26],['HUD',16]
+          ['MCI',98,38,32,2,4,95,23,72], ['LIV',97,38,30,7,1,89,22,67], ['CHE',72,38,21,9,8,63,39,24],
+          ['TOT',71,38,23,2,13,67,39,28], ['ARS',70,38,21,7,10,73,51,22], ['MUN',66,38,19,9,10,65,54,11],
+          ['WOL',57,38,16,9,13,47,46,1], ['EVE',54,38,15,9,14,54,46,8], ['LEI',52,38,15,7,16,51,48,3],
+          ['WHU',52,38,15,7,16,52,55,-3], ['WAT',50,38,14,8,16,52,59,-7], ['CRY',49,38,14,7,17,51,53,-2],
+          ['NEW',45,38,12,9,17,42,48,-6], ['BOU',45,38,13,6,19,56,70,-14], ['BUR',40,38,11,7,20,45,68,-23],
+          ['SOU',39,38,9,12,17,45,65,-20], ['BHA',36,38,9,9,20,35,60,-25], ['CAR',34,38,10,4,24,34,69,-35],
+          ['FUL',26,38,7,5,26,34,81,-47], ['HUD',16,38,3,7,28,22,76,-54]
         ]
       },
       {
         id: '19-20', label: '2019–20',
         table: [
-          ['LIV',99],['MCI',81],['MUN',66],['CHE',66],['LEI',62],
-          ['TOT',59],['WOL',59],['ARS',56],['SHU',54],['BUR',54],
-          ['SOU',52],['EVE',49],['NEW',44],['CRY',43],['BHA',41],
-          ['WHU',39],['AVL',35],['BOU',34],['WAT',34],['NOR',21]
+          ['LIV',99,38,32,3,3,85,33,52], ['MCI',81,38,26,3,9,102,35,67], ['MUN',66,38,18,12,8,66,36,30],
+          ['CHE',66,38,20,6,12,69,54,15], ['LEI',62,38,18,8,12,67,41,26], ['TOT',59,38,16,11,11,61,47,14],
+          ['WOL',59,38,15,14,9,51,40,11], ['ARS',56,38,14,14,10,56,48,8], ['SHU',54,38,14,12,12,39,39,0],
+          ['BUR',54,38,15,9,14,43,50,-7], ['SOU',52,38,15,7,16,51,60,-9], ['EVE',49,38,13,10,15,44,56,-12],
+          ['NEW',44,38,11,11,16,38,58,-20], ['CRY',43,38,11,10,17,31,50,-19], ['BHA',41,38,9,14,15,39,54,-15],
+          ['WHU',39,38,10,9,19,49,62,-13], ['AVL',35,38,9,8,21,41,67,-26], ['BOU',34,38,9,7,22,40,65,-25],
+          ['WAT',34,38,8,10,20,36,64,-28], ['NOR',21,38,5,6,27,26,75,-49]
         ]
       },
       {
         id: '20-21', label: '2020–21',
         table: [
-          ['MCI',86],['MUN',74],['LIV',69],['CHE',67],['LEI',66],
-          ['WHU',65],['TOT',62],['ARS',61],['LEE',59],['EVE',59],
-          ['AVL',55],['NEW',45],['WOL',45],['CRY',44],['SOU',43],
-          ['BHA',41],['BUR',39],['FUL',28],['WBA',26],['SHU',23]
+          ['MCI',86,38,27,5,6,83,32,51], ['MUN',74,38,21,11,6,73,44,29], ['LIV',69,38,20,9,9,68,42,26],
+          ['CHE',67,38,19,10,9,58,36,22], ['LEI',66,38,20,6,12,68,50,18], ['WHU',65,38,19,8,11,62,47,15],
+          ['TOT',62,38,18,8,12,68,45,23], ['ARS',61,38,18,7,13,55,39,16], ['LEE',59,38,18,5,15,62,54,8],
+          ['EVE',59,38,17,8,13,47,48,-1], ['AVL',55,38,16,7,15,55,46,9], ['NEW',45,38,12,9,17,46,62,-16],
+          ['WOL',45,38,12,9,17,36,52,-16], ['CRY',44,38,12,8,18,41,66,-25], ['SOU',43,38,12,7,19,47,68,-21],
+          ['BHA',41,38,9,14,15,40,46,-6], ['BUR',39,38,10,9,19,33,55,-22], ['FUL',28,38,5,13,20,27,53,-26],
+          ['WBA',26,38,5,11,22,35,76,-41], ['SHU',23,38,7,2,29,20,63,-43]
         ]
       },
       {
         id: '21-22', label: '2021–22',
         table: [
-          ['MCI',93],['LIV',92],['CHE',74],['TOT',71],['ARS',69],
-          ['MUN',58],['WHU',56],['LEI',52],['BHA',51],['WOL',51],
-          ['NEW',49],['CRY',48],['BRE',46],['AVL',45],['SOU',40],
-          ['EVE',39],['LEE',38],['BUR',35],['WAT',23],['NOR',22]
+          ['MCI',93,38,29,6,3,99,26,73], ['LIV',92,38,28,8,2,94,26,68], ['CHE',74,38,21,11,6,76,33,43],
+          ['TOT',71,38,22,5,11,69,40,29], ['ARS',69,38,22,3,13,61,48,13], ['MUN',58,38,16,10,12,57,57,0],
+          ['WHU',56,38,16,8,14,60,51,9], ['LEI',52,38,14,10,14,62,59,3], ['BHA',51,38,12,15,11,42,44,-2],
+          ['WOL',51,38,15,6,17,38,43,-5], ['NEW',49,38,13,10,15,44,62,-18], ['CRY',48,38,11,15,12,50,46,4],
+          ['BRE',46,38,13,7,18,48,56,-8], ['AVL',45,38,13,6,19,52,54,-2], ['SOU',40,38,9,13,16,43,67,-24],
+          ['EVE',39,38,11,6,21,43,66,-23], ['LEE',38,38,9,11,18,42,79,-37], ['BUR',35,38,7,14,17,34,53,-19],
+          ['WAT',23,38,6,5,27,34,77,-43], ['NOR',22,38,5,7,26,23,84,-61]
         ]
       },
       {
         id: '22-23', label: '2022–23',
         table: [
-          ['MCI',89],['ARS',84],['MUN',75],['NEW',71],['LIV',67],
-          ['BHA',62],['AVL',61],['TOT',60],['BRE',59],['FUL',52],
-          ['CRY',45],['CHE',44],['WOL',41],['WHU',40],['BOU',39],
-          ['NFO',38],['EVE',36],['LEI',34],['LEE',31],['SOU',25]
+          ['MCI',89,38,28,5,5,94,33,61], ['ARS',84,38,26,6,6,88,43,45], ['MUN',75,38,23,6,9,58,43,15],
+          ['NEW',71,38,19,14,5,68,33,35], ['LIV',67,38,19,10,9,75,47,28], ['BHA',62,38,18,8,12,72,53,19],
+          ['AVL',61,38,18,7,13,51,46,5], ['TOT',60,38,18,6,14,70,63,7], ['BRE',59,38,15,14,9,58,46,12],
+          ['FUL',52,38,15,7,16,55,53,2], ['CRY',45,38,11,12,15,40,49,-9], ['CHE',44,38,11,11,16,38,47,-9],
+          ['WOL',41,38,11,8,19,31,58,-27], ['WHU',40,38,11,7,20,42,55,-13], ['BOU',39,38,11,6,21,37,71,-34],
+          ['NFO',38,38,9,11,18,38,68,-30], ['EVE',36,38,8,12,18,34,57,-23], ['LEI',34,38,9,7,22,51,68,-17],
+          ['LEE',31,38,7,10,21,48,78,-30], ['SOU',25,38,6,7,25,36,73,-37]
         ]
       },
       {
         id: '23-24', label: '2023–24',
         table: [
-          ['MCI',91],['ARS',89],['LIV',82],['AVL',68],['TOT',66],
-          ['CHE',63],['NEW',60],['MUN',60],['WHU',52],['CRY',49],
-          ['BHA',48],['BOU',48],['FUL',47],['WOL',46],['EVE',40],
-          ['BRE',39],['NFO',32],['LUT',26],['BUR',24],['SHU',16]
+          ['MCI',91,38,28,7,3,96,34,62], ['ARS',89,38,28,5,5,91,29,62], ['LIV',82,38,24,10,4,86,41,45],
+          ['AVL',68,38,20,8,10,76,61,15], ['TOT',66,38,20,6,12,74,61,13], ['CHE',63,38,18,9,11,77,63,14],
+          ['NEW',60,38,18,6,14,85,62,23], ['MUN',60,38,18,6,14,57,58,-1], ['WHU',52,38,14,10,14,60,74,-14],
+          ['CRY',49,38,13,10,15,57,58,-1], ['BHA',48,38,12,12,14,55,62,-7], ['BOU',48,38,13,9,16,54,67,-13],
+          ['FUL',47,38,13,8,17,55,61,-6], ['WOL',46,38,13,7,18,50,65,-15], ['EVE',40,38,13,9,16,40,51,-11],
+          ['BRE',39,38,10,9,19,56,65,-9], ['NFO',32,38,9,9,20,49,67,-18], ['LUT',26,38,6,8,24,52,85,-33],
+          ['BUR',24,38,5,9,24,41,78,-37], ['SHU',16,38,3,7,28,35,104,-69]
         ]
       },
       {
         id: '24-25', label: '2024–25',
         table: [
-          ['LIV',84],['ARS',74],['MCI',71],['CHE',69],['NEW',66],
-          ['AVL',66],['NFO',65],['BHA',61],['BOU',56],['BRE',56],
-          ['FUL',54],['CRY',53],['EVE',48],['WHU',43],['MUN',42],
-          ['WOL',42],['TOT',38],['LEI',25],['IPS',22],['SOU',12]
+          ['LIV',84,38,25,9,4,86,41,45], ['ARS',74,38,20,14,4,69,34,35], ['MCI',71,38,21,8,9,72,44,28],
+          ['CHE',69,38,20,9,9,64,43,21], ['NEW',66,38,20,6,12,68,47,21], ['AVL',66,38,19,9,10,58,51,7],
+          ['NFO',65,38,19,8,11,58,46,12], ['BHA',61,38,16,13,9,66,59,7], ['BOU',56,38,15,11,12,58,46,12],
+          ['BRE',56,38,16,8,14,66,57,9], ['FUL',54,38,15,9,14,54,54,0], ['CRY',53,38,13,14,11,51,51,0],
+          ['EVE',48,38,11,15,12,42,44,-2], ['WHU',43,38,11,10,17,46,62,-16], ['MUN',42,38,11,9,18,44,54,-10],
+          ['WOL',42,38,12,6,20,54,69,-15], ['TOT',38,38,11,5,22,64,65,-1], ['LEI',25,38,6,7,25,33,80,-47],
+          ['IPS',22,38,4,10,24,36,82,-46], ['SOU',12,38,2,6,30,26,86,-60]
         ]
       },
       {
         id: '25-26', label: '2025–26',
         table: [
-          ['ARS',85],['MCI',78],['MUN',71],['AVL',65],['LIV',60],
-          ['BOU',57],['SUN',54],['BHA',53],['BRE',53],['CHE',52],
-          ['FUL',52],['NEW',49],['EVE',49],['LEE',47],['CRY',45],
-          ['NFO',44],['TOT',41],['WHU',39],['BUR',22],['WOL',20]
+          ['ARS',85,38,26,7,5,71,27,44], ['MCI',78,38,23,9,6,77,35,42], ['MUN',71,38,20,11,7,69,50,19],
+          ['AVL',65,38,19,8,11,56,49,7], ['LIV',60,38,17,9,12,63,53,10], ['BOU',57,38,13,18,7,58,54,4],
+          ['SUN',54,38,14,12,12,42,48,-6], ['BHA',53,38,14,11,13,52,46,6], ['BRE',53,38,14,11,13,55,52,3],
+          ['CHE',52,38,14,10,14,58,52,6], ['FUL',52,38,15,7,16,47,51,-4], ['NEW',49,38,14,7,17,53,55,-2],
+          ['EVE',49,38,13,10,15,47,50,-3], ['LEE',47,38,11,14,13,49,56,-7], ['CRY',45,38,11,12,15,41,51,-10],
+          ['NFO',44,38,11,11,16,48,51,-3], ['TOT',41,38,10,11,17,48,57,-9], ['WHU',39,38,10,9,19,46,65,-19],
+          ['BUR',22,38,4,10,24,38,75,-37], ['WOL',20,38,3,11,24,27,68,-41]
+        ]
+      },
+      {
+        id: '26-27', label: '2026–27', live: true, asOf: '2026-11-21',
+        table: [
+          ['ARS',28,11,9,1,1,17,7,10,'WWWWD'],
+          ['BHA',22,10,7,1,2,26,7,19,'WWLWW'],
+          ['MCI',22,11,7,1,3,22,14,8,'WLLLD'],
+          ['BOU',18,11,5,3,3,18,14,4,'WWWWW'],
+          ['LIV',18,10,5,3,2,14,10,4,'LWWLW'],
+          ['LEE',17,11,4,5,2,14,9,5,'DDLWW'],
+          ['EVE',16,10,4,4,2,12,10,2,'DLLWW'],
+          ['CHE',16,11,5,1,5,20,20,0,'WLWWL'],
+          ['TOT',15,11,4,3,4,12,11,1,'WWWLW'],
+          ['BRE',14,10,3,5,2,16,11,5,'DLDWL'],
+          ['AVL',14,11,3,5,3,14,17,-3,'WWDDD'],
+          ['NEW',13,11,3,4,4,15,18,-3,'LWLDD'],
+          ['COV',12,11,4,0,7,13,21,-8,'LLLWW'],
+          ['HUL',11,10,2,5,3,11,11,0,null],
+          ['FUL',11,11,2,5,4,null,null,-2,null],
+          ['IPS',11,11,3,2,6,null,null,-7,null],
+          ['NFO',9,11,2,3,6,null,null,-6,null],
+          ['SUN',9,11,2,3,6,null,null,-9,null],
+          ['MUN',8,10,1,5,4,14,19,-5,null],
+          ['CRY',7,11,2,1,8,null,null,-15,null]
         ]
       }
     ];
 
-    // Precompute club histories across all 14 seasons
+    const COMPLETED_SEASONS = SEASONS.filter(s => !s.live);
+
+    // Precompute club histories across completed seasons + live snapshot
     const clubHistory = {};
     Object.keys(CLUBS).forEach(code => {
       clubHistory[code] = {
         code,
         seasons: [],
+        liveSeason: null,
         best: 99,
         worst: 0,
         titles: 0,
@@ -398,15 +494,21 @@
     });
 
     SEASONS.forEach((s, sIdx) => {
-      s.table.forEach(([code, pts], idx) => {
+      s.table.forEach((row, idx) => {
+        const [code, pts, mp, w, d, l, gf, ga, gd, form] = row;
         const rank = idx + 1;
         const h = clubHistory[code];
-        h.seasons.push({ sIdx, season: s.label, id: s.id, rank, pts });
-        if (rank < h.best) h.best = rank;
-        if (rank > h.worst) h.worst = rank;
-        if (rank === 1) h.titles++;
-        if (rank <= 4) h.top4++;
-        if (rank >= 18) h.relegations++;
+        const entry = { sIdx, season: s.label, id: s.id, rank, pts, mp, w, d, l, gf, ga, gd, form, live: Boolean(s.live) };
+        if (s.live) {
+          h.liveSeason = entry;
+        } else {
+          h.seasons.push(entry);
+          if (rank < h.best) h.best = rank;
+          if (rank > h.worst) h.worst = rank;
+          if (rank === 1) h.titles++;
+          if (rank <= 4) h.top4++;
+          if (rank >= 18) h.relegations++;
+        }
       });
     });
 
@@ -416,246 +518,33 @@
       }
     });
 
-    // Ever-present clubs across all 14 seasons
-    const everPresent = Object.values(clubHistory).filter(h => h.seasons.length === SEASONS.length);
+    const everPresent = Object.values(clubHistory).filter(h => h.seasons.length === COMPLETED_SEASONS.length);
+    document.getElementById('ever-present-count').textContent = `${everPresent.length} 支`;
 
     // State
-    const urlLang = new URLSearchParams(window.location.search).get('lang');
-    let uiLang = (urlLang === 'en' || urlLang === 'zh') ? urlLang : (localStorage.getItem('pl_ui_lang') || 'zh');
     let currentMode = 'featured'; // featured | all | big6 | champions | darkhorses
     let currentRange = 'all';     // all | 10 | 6
-    let labelLang = uiLang === 'en' ? 'en' : 'en'; // en | zh
+    let includeLive = true;
+    let labelLang = 'en';         // en | zh
     let pinnedTeams = new Set();
     let hoveredTeam = null;
-
-    const I18N = {
-      zh: {
-        docTitle: '英超历年最终排名全景图 (2012–13 至 2025–26)',
-        badgeSub: '2012–13 → 2025–26 · 14 完整赛季',
-        pageTitle: '英超历年最终排名全景图',
-        pageSubtitle: '一图纵览 2012 年以来全部 14 个赛季第 1–20 名轨迹 · 悬停查看积分详情 · 点击任意球队锁定对比',
-        kpiTitlesLabel: '夺冠最多',
-        kpiLatestLabel: '最新冠军 (25–26)',
-        kpiEverLabel: '14 季全勤球队',
-        kpiTitlesSuffix: '冠',
-        kpiPtsSuffix: '分',
-        kpiEverSuffix: '支',
-        modes: {
-          featured: '✨ 视觉聚焦（Big 6 + 奇迹冠军）',
-          all: '🌈 全部 20 队全彩',
-          big6: '⚔️ 仅看 Big 6',
-          champions: '🏆 历届冠军队 (6 队)',
-          darkhorses: '🚀 新贵与黑马'
-        },
-        ranges: {
-          all: '全部 14 季',
-          10: '近 10 季',
-          6: '近 6 季'
-        },
-        uiLangBtn: '🌐 EN',
-        nodeLangEn: '节点标签：英文简称',
-        nodeLangZh: '节点标签：中文简称',
-        themeLight: '☀️ 浅色模式',
-        themeDark: '🌙 深色模式',
-        clearPins: (n) => `清除锁定 (${n})`,
-        pinPrompt: '点击锁定对比：',
-        legendChamp: '第 1 名 · 冠军',
-        legendUcl: '第 1–4 名 · 欧冠区',
-        legendUel: '第 5–6 名 · 欧战区',
-        legendRel: '第 18–20 名 · 降级区',
-        legendReturn: '降级后重返英超',
-        chartAria: '英超历年排名走势图',
-        drawerTitle: '2012–26 历届冠军与高光时刻',
-        drawerSubtitle: '点击上方任意球队标签或图中节点，可在此查看该队 14 赛季完整排名曲线与统计摘要',
-        champTip: (season, clubName, pts) => `${season} 冠军：${clubName} (${pts}分)`,
-        cardTitles: '冠军',
-        cardBest: '最高排名',
-        cardAvg: '平均排名',
-        cardRel: '在籍/降级',
-        statusHover: (club) => `正在预览：${club.zh} (${club.name})`,
-        statusPinned: (names) => `已锁定对比：${names}`,
-        modeStatus: {
-          featured: '视觉聚焦模式（Big 6 + 莱斯特城高亮，其余球队清晰可读）',
-          all: '全彩模式（全部 20 队轨迹高亮）',
-          big6: 'Big 6 争冠轨迹对比',
-          champions: '2012 年以来 6 支英超冠军队',
-          darkhorses: '英超新贵与黑马轨迹'
-        },
-        tipBaseline: '首季基准',
-        tipPromoted: '▲ 升班马',
-        tipUp: (d) => `▲ 上升 ${d} 名`,
-        tipDown: (d) => `▼ 下降 ${d} 名`,
-        tipSame: '● 排名持平',
-        badgeChamp: '🏆 冠军',
-        badgeUcl: '欧冠区',
-        badgeRel: '降级',
-        tipSeason: '赛季',
-        tipRank: '最终排名',
-        tipPts: '最终积分',
-        tipYoY: '较上季：',
-        tipAvg: (v) => `14季均排 #${v}`,
-        tipClickPin: '点击可锁定对比该队完整曲线',
-        tipClickUnpin: '点击可取消锁定该队完整曲线'
-      },
-      en: {
-        docTitle: 'Premier League Final Standings Panorama (2012–13 to 2025–26)',
-        badgeSub: '2012–13 → 2025–26 · 14 Full Seasons',
-        pageTitle: 'Premier League Final Standings Panorama',
-        pageSubtitle: '14 seasons of 1st–20th finish trajectories since 2012 · Hover for points & YoY delta · Click any club to pin & compare',
-        kpiTitlesLabel: 'Most Titles',
-        kpiLatestLabel: 'Latest Champion (25–26)',
-        kpiEverLabel: 'Ever-Present (14 Seasons)',
-        kpiTitlesSuffix: 'Titles',
-        kpiPtsSuffix: 'pts',
-        kpiEverSuffix: 'Clubs',
-        modes: {
-          featured: '✨ Featured (Big 6 + Leicester)',
-          all: '🌈 All 20 Clubs',
-          big6: '⚔️ Big 6 Only',
-          champions: '🏆 Champions (6 Clubs)',
-          darkhorses: '🚀 Rising & Dark Horses'
-        },
-        ranges: {
-          all: 'All 14 Seasons',
-          10: 'Last 10',
-          6: 'Last 6'
-        },
-        uiLangBtn: '🌐 中文',
-        nodeLangEn: 'Node Labels: Code',
-        nodeLangZh: 'Node Labels: 中文',
-        themeLight: '☀️ Light',
-        themeDark: '🌙 Dark',
-        clearPins: (n) => `Clear Pins (${n})`,
-        pinPrompt: 'Pin to compare:',
-        legendChamp: '1st · Champion',
-        legendUcl: '1st–4th · UCL',
-        legendUel: '5th–6th · Europa',
-        legendRel: '18th–20th · Relegation',
-        legendReturn: 'Returned after relegation',
-        chartAria: 'Premier League Final Standings Bump Chart',
-        drawerTitle: '2012–26 Champions & Club History',
-        drawerSubtitle: 'Click any club chip above or chart node to inspect its 14-season trajectory & stats here',
-        champTip: (season, clubName, pts) => `${season} Champion: ${clubName} (${pts} pts)`,
-        cardTitles: 'Titles',
-        cardBest: 'Best',
-        cardAvg: 'Avg Rank',
-        cardRel: 'Seasons/Rel.',
-        statusHover: (club) => `Previewing: ${club.name}`,
-        statusPinned: (names) => `Pinned: ${names}`,
-        modeStatus: {
-          featured: 'Featured Mode (Big 6 + Leicester highlighted, others legible)',
-          all: 'Full Color Mode (All 20 clubs highlighted)',
-          big6: 'Big 6 Title Race Comparison',
-          champions: '6 Premier League Champions Since 2012',
-          darkhorses: 'Rising Challengers & Dark Horses'
-        },
-        tipBaseline: 'Baseline season',
-        tipPromoted: '▲ Promoted',
-        tipUp: (d) => `▲ Up ${d}`,
-        tipDown: (d) => `▼ Down ${d}`,
-        tipSame: '● Unchanged',
-        badgeChamp: '🏆 Champion',
-        badgeUcl: 'UCL',
-        badgeRel: 'Relegated',
-        tipSeason: 'Season',
-        tipRank: 'Rank',
-        tipPts: 'Points',
-        tipYoY: 'YoY:',
-        tipAvg: (v) => `14-yr Avg #${v}`,
-        tipClickPin: 'Click to pin full trajectory',
-        tipClickUnpin: 'Click to unpin full trajectory'
-      }
-    };
-
-    function t() {
-      return I18N[uiLang];
-    }
-
-    function getClubDisplayName(code, short = false) {
-      const club = CLUBS[code];
-      if (uiLang === 'zh') return short ? club.shortZh : club.zh;
-      return short ? club.shortEn : club.name;
-    }
-
-    function getClubLogoUrl(code) {
-      const club = CLUBS[code];
-      return `https://a.espncdn.com/i/teamlogos/soccer/500/${club.espnId}.png`;
-    }
-
-    function getClubFallbackSvg(code) {
-      const club = CLUBS[code];
-      const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="${club.color}"/><text x="12" y="15.5" text-anchor="middle" font-size="8.5" font-family="Arial,sans-serif" font-weight="bold" fill="#fff">${code}</text></svg>`;
-      return `data:image/svg+xml;utf8,${encodeURIComponent(svgStr)}`;
-    }
-
-    function clubLogoImg(code, sizeClass = 'w-4 h-4') {
-      const club = CLUBS[code];
-      const url = getClubLogoUrl(code);
-      const fallback = getClubFallbackSvg(code);
-      return `<img src="${url}" alt="${club.name} logo" class="${sizeClass} object-contain shrink-0 inline-block select-none" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'" />`;
-    }
-
-    function applyStaticTranslations() {
-      const tr = t();
-      document.documentElement.lang = uiLang === 'zh' ? 'zh-CN' : 'en';
-      document.title = tr.docTitle;
-      document.getElementById('header-badge-sub').textContent = tr.badgeSub;
-      document.getElementById('page-title').textContent = tr.pageTitle;
-      document.getElementById('page-subtitle').textContent = tr.pageSubtitle;
-
-      document.getElementById('kpi-titles-label').textContent = tr.kpiTitlesLabel;
-      document.getElementById('kpi-titles-val').innerHTML = `
-        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#38BDF8"></span>
-        <span>${getClubDisplayName('MCI', true)}</span>
-        ${clubLogoImg('MCI', 'w-4 h-4')}
-        <span class="font-mono text-[var(--primary)]">7</span>
-        <span class="text-xs sm:text-sm font-semibold">${tr.kpiTitlesSuffix}</span>
-      `;
-
-      document.getElementById('kpi-latest-label').textContent = tr.kpiLatestLabel;
-      document.getElementById('kpi-latest-val').innerHTML = `
-        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
-        <span>${getClubDisplayName('ARS', true)}</span>
-        ${clubLogoImg('ARS', 'w-4 h-4')}
-        <span class="font-mono text-xs sm:text-sm">85${uiLang === 'zh' ? tr.kpiPtsSuffix : ' ' + tr.kpiPtsSuffix}</span>
-      `;
-
-      document.getElementById('kpi-ever-label').textContent = tr.kpiEverLabel;
-      document.getElementById('ever-present-count').textContent = `${everPresent.length} ${tr.kpiEverSuffix}`;
-
-      document.querySelectorAll('#mode-buttons button').forEach(btn => {
-        btn.textContent = tr.modes[btn.dataset.mode];
-      });
-      document.querySelectorAll('.range-btn').forEach(btn => {
-        btn.textContent = tr.ranges[btn.dataset.range];
-      });
-
-      document.getElementById('pin-prompt').textContent = tr.pinPrompt;
-      document.getElementById('legend-champ').textContent = tr.legendChamp;
-      document.getElementById('legend-ucl').textContent = tr.legendUcl;
-      document.getElementById('legend-uel').textContent = tr.legendUel;
-      document.getElementById('legend-rel').textContent = tr.legendRel;
-      document.getElementById('legend-return').textContent = tr.legendReturn;
-      document.getElementById('bump-chart').setAttribute('aria-label', tr.chartAria);
-      document.getElementById('drawer-title').textContent = tr.drawerTitle;
-      document.getElementById('drawer-subtitle').textContent = tr.drawerSubtitle;
-    }
 
     const BIG6 = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT']);
     const CHAMPIONS = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'LEI']);
     const FEATURED = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT', 'LEI']);
-    const DARKHORSES = new Set(['AVL', 'NEW', 'BHA', 'NFO', 'BOU', 'BRE', 'SUN', 'LEI']);
+    const DARKHORSES = new Set(['AVL', 'NEW', 'BHA', 'NFO', 'BOU', 'BRE', 'SUN', 'LEE', 'COV', 'LEI']);
 
     const CHIP_ORDER = [
       'MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT', 'LEI',
-      'AVL', 'NEW', 'BHA', 'NFO', 'BOU', 'BRE', 'EVE',
-      'WHU', 'CRY', 'FUL', 'WOL', 'SUN', 'LEE', 'SOU', 'BUR'
+      'BHA', 'BOU', 'AVL', 'NEW', 'LEE', 'EVE', 'BRE',
+      'NFO', 'WHU', 'CRY', 'FUL', 'WOL', 'SUN', 'COV', 'HUL', 'IPS'
     ];
 
     function getVisibleSeasons() {
-      if (currentRange === '10') return SEASONS.slice(-10);
-      if (currentRange === '6') return SEASONS.slice(-6);
-      return SEASONS;
+      const pool = includeLive ? SEASONS : COMPLETED_SEASONS;
+      if (currentRange === '10') return pool.slice(-10);
+      if (currentRange === '6') return pool.slice(-6);
+      return pool;
     }
 
     function isTeamEmphasized(code) {
@@ -677,9 +566,24 @@
       return val || fallback;
     }
 
+    function fmtGD(gd) {
+      return gd > 0 ? `+${gd}` : `${gd}`;
+    }
+
+    function renderFormDots(form) {
+      if (!form) return '';
+      return form.split('').map((ch, idx) => {
+        const isLatest = idx === form.length - 1;
+        const bg = ch === 'W' ? '#10B981' : ch === 'L' ? '#EF4444' : '#94A3B8';
+        const sym = ch === 'W' ? '✓' : ch === 'L' ? '✕' : '–';
+        const title = ch === 'W' ? '胜' : ch === 'L' ? '负' : '平';
+        const ring = isLatest ? `box-shadow:0 0 0 2px var(--card), 0 0 0 3.5px ${bg};` : '';
+        return `<span title="${title}" style="background:${bg};${ring}" class="inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold text-white leading-none">${sym}</span>`;
+      }).join('');
+    }
+
     // Build quick club chips
     function renderClubChips() {
-      const tr = t();
       const container = document.getElementById('club-chips');
       container.innerHTML = '';
       CHIP_ORDER.forEach(code => {
@@ -696,7 +600,7 @@
           btn.style.borderColor = 'var(--border)';
           btn.style.color = 'var(--foreground)';
         }
-        btn.innerHTML = `<span class="w-2 h-2 rounded-full shrink-0" style="background:${isPinned ? '#fff' : club.color}"></span><span>${getClubDisplayName(code, true)}</span>${clubLogoImg(code, 'w-3.5 h-3.5')}`;
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${isPinned ? '#fff' : club.color}"></span>${club.zh}`;
         btn.addEventListener('click', () => togglePin(code));
         btn.addEventListener('mouseenter', () => {
           hoveredTeam = code;
@@ -712,29 +616,26 @@
       const clearBtn = document.getElementById('clear-pins');
       if (pinnedTeams.size > 0) {
         clearBtn.classList.remove('hidden');
-        clearBtn.textContent = tr.clearPins(pinnedTeams.size);
+        clearBtn.textContent = `清除锁定 (${pinnedTeams.size})`;
       } else {
         clearBtn.classList.add('hidden');
       }
     }
 
-    // Render champions timeline badges
+    // Render champions timeline badges (completed seasons only)
     function renderChampionsTimeline() {
-      const tr = t();
       const container = document.getElementById('champions-timeline');
       container.innerHTML = '';
-      SEASONS.forEach(s => {
+      COMPLETED_SEASONS.forEach(s => {
         const [champCode, pts] = s.table[0];
         const club = CLUBS[champCode];
-        const clubName = getClubDisplayName(champCode, true);
         const chip = document.createElement('button');
         chip.className = 'pill-btn inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs border border-[var(--border)] bg-[var(--background)]';
-        chip.title = tr.champTip(s.label, clubName, pts);
+        chip.title = `${s.label} 冠军：${club.zh} (${pts}分)`;
         chip.innerHTML = `
           <span class="font-mono text-[11px] text-[var(--muted-foreground)]">${s.id}</span>
-          <span class="w-2 h-2 rounded-full shrink-0" style="background:${club.color}"></span>
-          <span class="font-semibold">${clubName}</span>
-          ${clubLogoImg(champCode, 'w-3.5 h-3.5')}
+          <span class="w-2 h-2 rounded-full" style="background:${club.color}"></span>
+          <span class="font-semibold">${club.shortZh}</span>
         `;
         chip.addEventListener('click', () => togglePin(champCode));
         container.appendChild(chip);
@@ -742,7 +643,6 @@
     }
 
     function renderPinnedCards() {
-      const tr = t();
       const box = document.getElementById('pinned-cards');
       if (pinnedTeams.size === 0) {
         box.classList.add('hidden');
@@ -757,39 +657,50 @@
         const h = clubHistory[code];
         const card = document.createElement('div');
         card.className = 'rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 flex flex-col gap-2';
-        const primaryName = uiLang === 'zh' ? club.zh : club.name;
-        const secondaryName = uiLang === 'zh' ? club.name : club.zh;
+
+        const liveHtml = h.liveSeason ? `
+          <div class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-[11px]">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 live-dot"></span>
+              <span class="font-semibold text-emerald-400">26–27 实时 #${h.liveSeason.rank}</span>
+              <span class="font-mono text-[var(--foreground)]">${h.liveSeason.pts}分 (${h.liveSeason.mp}场 · ${h.liveSeason.w}胜${h.liveSeason.d}平${h.liveSeason.l}负 · GD ${fmtGD(h.liveSeason.gd)})</span>
+            </div>
+            ${h.liveSeason.form ? `<div class="flex items-center gap-1 shrink-0">${renderFormDots(h.liveSeason.form)}</div>` : ''}
+          </div>
+        ` : '';
+
         card.innerHTML = `
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5 min-w-0">
-              <span class="w-3 h-3 rounded-full shrink-0" style="background:${club.color}"></span>
-              <span class="font-bold text-sm truncate">${primaryName}</span>
-              ${clubLogoImg(code, 'w-5 h-5')}
-              <span class="text-xs text-[var(--muted-foreground)] truncate">${secondaryName}</span>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background:${club.color}"></span>
+              <span class="font-bold text-sm">${club.zh}</span>
+              <span class="text-xs text-[var(--muted-foreground)]">${club.name}</span>
             </div>
-            <button data-unpin="${code}" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded cursor-pointer shrink-0">✕</button>
+            <button data-unpin="${code}" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded cursor-pointer">✕</button>
           </div>
           <div class="grid grid-cols-4 gap-2 text-center">
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardTitles}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">完结季冠军</div>
               <div class="font-mono font-bold text-sm">${h.titles}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardBest}</div>
-              <div class="font-mono font-bold text-sm">#${h.best}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">最高排名</div>
+              <div class="font-mono font-bold text-sm">${h.seasons.length ? '#' + h.best : (h.liveSeason ? '#' + h.liveSeason.rank : '—')}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardAvg}</div>
-              <div class="font-mono font-bold text-sm">${h.avgRank.toFixed(1)}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">平均排名</div>
+              <div class="font-mono font-bold text-sm">${h.seasons.length ? h.avgRank.toFixed(1) : '—'}</div>
             </div>
             <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
-              <div class="text-[11px] text-[var(--muted-foreground)]">${tr.cardRel}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">完结季/降级</div>
               <div class="font-mono font-bold text-sm">${h.seasons.length}/${h.relegations}</div>
             </div>
           </div>
+          ${liveHtml}
           <div class="flex flex-wrap gap-1 pt-0.5">
             ${h.seasons.map(item => `
-              <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-mono border border-[var(--border)]"
+              <span title="${item.season}: #${item.rank} · ${item.pts}分 (${item.w}胜${item.d}平${item.l}负, 进${item.gf}失${item.ga}, GD ${fmtGD(item.gd)})"
+                class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-mono border border-[var(--border)]"
                 style="${item.rank === 1 ? 'background:rgba(245,158,11,0.18);border-color:#F59E0B;font-weight:700;' : item.rank >= 18 ? 'background:rgba(239,68,68,0.14);border-color:rgba(239,68,68,0.5);' : ''}">
                 <span class="text-[var(--muted-foreground)]">${item.id}:</span><span>#${item.rank}</span>
               </span>
@@ -812,9 +723,7 @@
       updateHighlights();
     }
 
-    // Update mode & range buttons styling
     function updateControlButtons() {
-      const tr = t();
       document.querySelectorAll('#mode-buttons button').forEach(btn => {
         const active = btn.dataset.mode === currentMode;
         if (active) {
@@ -839,22 +748,22 @@
         }
       });
 
-      document.querySelectorAll('.uilang-btn').forEach(btn => {
-        const active = btn.dataset.uilang === uiLang;
-        if (active) {
-          btn.style.background = 'var(--primary)';
-          btn.style.color = 'var(--primary-foreground)';
-        } else {
-          btn.style.background = 'transparent';
-          btn.style.color = 'var(--muted-foreground)';
-        }
-      });
+      const liveBtn = document.getElementById('toggle-live');
+      if (includeLive) {
+        liveBtn.style.background = 'rgba(16, 185, 129, 0.14)';
+        liveBtn.style.borderColor = 'rgba(16, 185, 129, 0.45)';
+        liveBtn.style.color = '#10B981';
+      } else {
+        liveBtn.style.background = 'var(--background)';
+        liveBtn.style.borderColor = 'var(--border)';
+        liveBtn.style.color = 'var(--muted-foreground)';
+      }
 
       document.getElementById('toggle-lang').textContent =
-        labelLang === 'en' ? tr.nodeLangEn : tr.nodeLangZh;
+        labelLang === 'en' ? '节点标签：英文简称' : '节点标签：中文简称';
 
       document.getElementById('toggle-theme').textContent =
-        isLightTheme() ? tr.themeDark : tr.themeLight;
+        isLightTheme() ? '🌙 深色模式' : '☀️ 浅色模式';
     }
 
     // =========================================================================
@@ -867,11 +776,11 @@
       const numRanks = 20;
 
       const padLeft = 58;
-      const padRight = 152;
-      const padTop = 44;
+      const padRight = 114;
+      const padTop = 50;
       const padBottom = 34;
 
-      const colStep = numSeasons >= 12 ? 84 : numSeasons >= 8 ? 102 : 136;
+      const colStep = numSeasons >= 13 ? 80 : numSeasons >= 9 ? 98 : 132;
       const rowStep = 31;
 
       const width = padLeft + (numSeasons - 1) * colStep + padRight;
@@ -899,7 +808,6 @@
       const border = getCssVar('--border', light ? '#e2e8f0' : '#334155');
       const cardBg = getCssVar('--card', light ? '#ffffff' : '#111827');
 
-      // Defs for glow
       const defs = el('defs', {}, svg);
       const glow = el('filter', { id: 'gold-glow', x: '-30%', y: '-30%', width: '160%', height: '160%' }, defs);
       el('feGaussianBlur', { stdDeviation: '2.5', result: 'blur' }, glow);
@@ -910,7 +818,6 @@
       // 1. Background Zone Bands
       const zonesLayer = el('g', { class: 'zones-layer' }, svg);
 
-      // Rank 1 Champion Gold Band
       el('rect', {
         x: 6, y: yOf(1) - rowStep / 2,
         width: width - 12, height: rowStep,
@@ -918,7 +825,6 @@
         fill: light ? 'rgba(245, 158, 11, 0.11)' : 'rgba(245, 158, 11, 0.14)'
       }, zonesLayer);
 
-      // Rank 2-4 UCL Band
       el('rect', {
         x: 6, y: yOf(2) - rowStep / 2,
         width: width - 12, height: rowStep * 3,
@@ -926,7 +832,6 @@
         fill: light ? 'rgba(16, 185, 129, 0.06)' : 'rgba(16, 185, 129, 0.08)'
       }, zonesLayer);
 
-      // Rank 5-6 Europa Band
       el('rect', {
         x: 6, y: yOf(5) - rowStep / 2,
         width: width - 12, height: rowStep * 2,
@@ -934,7 +839,6 @@
         fill: light ? 'rgba(59, 130, 246, 0.05)' : 'rgba(59, 130, 246, 0.07)'
       }, zonesLayer);
 
-      // Rank 18-20 Relegation Band
       el('rect', {
         x: 6, y: yOf(18) - rowStep / 2,
         width: width - 12, height: rowStep * 3,
@@ -942,13 +846,31 @@
         fill: light ? 'rgba(239, 68, 68, 0.07)' : 'rgba(239, 68, 68, 0.10)'
       }, zonesLayer);
 
-      // Left accent bars for zones
+      // Live season vertical highlight column
+      const liveIdx = seasons.findIndex(s => s.live);
+      if (liveIdx !== -1) {
+        const lx = xOf(liveIdx);
+        el('rect', {
+          x: lx - 30,
+          y: 4,
+          width: 60,
+          height: height - 8,
+          rx: 12,
+          fill: light ? 'rgba(16, 185, 129, 0.07)' : 'rgba(16, 185, 129, 0.08)',
+          stroke: '#10B981',
+          'stroke-opacity': 0.35,
+          'stroke-dasharray': '4 3',
+          'stroke-width': 1
+        }, zonesLayer);
+      }
+
+      // Left accent bars
       el('rect', { x: 8, y: yOf(1) - rowStep / 2 + 2, width: 3.5, height: rowStep - 4, rx: 2, fill: '#F59E0B' }, zonesLayer);
       el('rect', { x: 8, y: yOf(2) - rowStep / 2 + 2, width: 3.5, height: rowStep * 3 - 4, rx: 2, fill: '#10B981' }, zonesLayer);
       el('rect', { x: 8, y: yOf(5) - rowStep / 2 + 2, width: 3.5, height: rowStep * 2 - 4, rx: 2, fill: '#3B82F6' }, zonesLayer);
       el('rect', { x: 8, y: yOf(18) - rowStep / 2 + 2, width: 3.5, height: rowStep * 3 - 4, rx: 2, fill: '#EF4444' }, zonesLayer);
 
-      // Dashed divider lines (Top 4 & Relegation)
+      // Dashed divider lines
       el('line', {
         x1: padLeft - 24, x2: width - padRight + 24,
         y1: yOf(4) + rowStep / 2, y2: yOf(4) + rowStep / 2,
@@ -988,15 +910,30 @@
         el('line', {
           x1: x, x2: x,
           y1: padTop - 16, y2: yOf(numRanks) + 14,
-          stroke: border, 'stroke-opacity': 0.45, 'stroke-width': 1
+          stroke: s.live ? '#10B981' : border,
+          'stroke-opacity': s.live ? 0.35 : 0.45,
+          'stroke-dasharray': s.live ? '3 3' : 'none',
+          'stroke-width': 1
         }, gridLayer);
 
+        if (s.live) {
+          el('rect', {
+            x: x - 24, y: 6, width: 48, height: 15, rx: 7.5,
+            fill: 'rgba(16, 185, 129, 0.2)', stroke: '#10B981', 'stroke-width': 0.8
+          }, gridLayer);
+          const badgeTxt = el('text', {
+            x, y: 16.5, 'text-anchor': 'middle',
+            fill: '#10B981', 'font-size': '9', 'font-weight': '700'
+          }, gridLayer);
+          badgeTxt.textContent = 'LIVE';
+        }
+
         const topLabel = el('text', {
-          x, y: 20,
+          x, y: s.live ? 31 : 24,
           'text-anchor': 'middle',
-          fill: idx === numSeasons - 1 ? fg : muted,
-          'font-size': '12',
-          'font-weight': idx === numSeasons - 1 ? '700' : '600',
+          fill: s.live ? '#10B981' : (idx === numSeasons - 1 ? fg : muted),
+          'font-size': '11.5',
+          'font-weight': (s.live || idx === numSeasons - 1) ? '700' : '600',
           'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
         }, gridLayer);
         topLabel.textContent = s.label;
@@ -1004,19 +941,21 @@
         const botLabel = el('text', {
           x, y: height - 8,
           'text-anchor': 'middle',
-          fill: muted,
-          'font-size': '11',
+          fill: s.live ? '#10B981' : muted,
+          'font-size': '10.5',
+          'font-weight': s.live ? '700' : '400',
           'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
         }, gridLayer);
-        botLabel.textContent = s.id;
+        botLabel.textContent = s.live ? '进行中' : s.id;
       });
 
       // 3. Collect paths per team within visible seasons
       const teamPoints = {};
       seasons.forEach((s, sIdx) => {
-        s.table.forEach(([code, pts], idx) => {
+        s.table.forEach((row, idx) => {
+          const code = row[0];
           if (!teamPoints[code]) teamPoints[code] = [];
-          teamPoints[code].push({ sIdx, season: s.label, id: s.id, rank: idx + 1, pts });
+          teamPoints[code].push({ sIdx, season: s.label, id: s.id, rank: idx + 1, pts: row[1], live: Boolean(s.live) });
         });
       });
 
@@ -1035,6 +974,7 @@
           const x1 = xOf(a.sIdx), y1 = yOf(a.rank);
           const x2 = xOf(b.sIdx), y2 = yOf(b.rank);
           const consecutive = (b.sIdx - a.sIdx) === 1;
+          const toLive = b.live;
 
           const dx = (x2 - x1) * 0.48;
           const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
@@ -1044,8 +984,9 @@
             fill: 'none',
             stroke: club.color,
             'stroke-linecap': 'round',
-            'stroke-dasharray': consecutive ? 'none' : '4 5',
-            'data-consecutive': consecutive ? '1' : '0',
+            'stroke-dasharray': (!consecutive || toLive) ? '5 4' : 'none',
+            'data-consecutive': (consecutive && !toLive) ? '1' : '0',
+            'data-tolive': toLive ? '1' : '0',
             'data-team': code,
             class: 'team-path'
           }, gTeam);
@@ -1055,7 +996,8 @@
       // 5. Draw Nodes
       seasons.forEach((s, sIdx) => {
         const x = xOf(sIdx);
-        s.table.forEach(([code, pts], idx) => {
+        s.table.forEach((row, idx) => {
+          const [code, pts] = row;
           const rank = idx + 1;
           const y = yOf(rank);
           const club = CLUBS[code];
@@ -1068,19 +1010,20 @@
             'data-pts': pts
           }, nodesLayer);
 
-          const isChamp = rank === 1;
+          const isChamp = rank === 1 && !s.live;
+          const isLiveLeader = rank === 1 && s.live;
           const pillW = labelLang === 'zh' ? 44 : 38;
-          const pillH = isChamp ? 22 : 19;
+          const pillH = (isChamp || isLiveLeader) ? 22 : 19;
 
           el('rect', {
             x: x - pillW / 2,
             y: y - pillH / 2,
             width: pillW,
             height: pillH,
-            rx: isChamp ? 11 : 9.5,
+            rx: (isChamp || isLiveLeader) ? 11 : 9.5,
             fill: club.color,
-            stroke: isChamp ? '#F59E0B' : cardBg,
-            'stroke-width': isChamp ? 2.2 : 1.5,
+            stroke: isChamp ? '#F59E0B' : (isLiveLeader ? '#10B981' : cardBg),
+            'stroke-width': (isChamp || isLiveLeader) ? 2.2 : 1.5,
             filter: isChamp ? 'url(#gold-glow)' : 'none',
             class: 'node-rect'
           }, gNode);
@@ -1113,12 +1056,14 @@
         });
       });
 
-      // 6. Right-side 2025-26 Final Season Club Names + Logo + Points
+      // 6. Right-side Latest Season Club Names
       const lastSeason = seasons[numSeasons - 1];
-      const rightX = xOf(numSeasons - 1) + 28;
-      lastSeason.table.forEach(([code, pts], idx) => {
+      const rightX = xOf(numSeasons - 1) + 32;
+      lastSeason.table.forEach((row, idx) => {
+        const [code, pts] = row;
         const rank = idx + 1;
         const y = yOf(rank);
+        const club = CLUBS[code];
         const gLabel = el('g', {
           class: 'team-node right-label',
           'data-team': code
@@ -1131,32 +1076,7 @@
           'font-size': '11.5',
           'font-weight': rank <= 4 ? '700' : '500'
         }, gLabel);
-        lbl.textContent = getClubDisplayName(code, true);
-
-        const textWidth = lbl.getComputedTextLength();
-        const logoX = rightX + textWidth + 5;
-        const logoSize = 15;
-        const img = el('image', {
-          x: logoX,
-          y: y - logoSize / 2,
-          width: logoSize,
-          height: logoSize,
-          href: getClubLogoUrl(code),
-          preserveAspectRatio: 'xMidYMid meet'
-        }, gLabel);
-        img.addEventListener('error', () => {
-          img.setAttribute('href', getClubFallbackSvg(code));
-        }, { once: true });
-
-        const ptsLbl = el('text', {
-          x: logoX + logoSize + 4,
-          y: y + 4,
-          fill: muted,
-          'font-size': '11',
-          'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace',
-          'font-weight': rank <= 4 ? '700' : '500'
-        }, gLabel);
-        ptsLbl.textContent = `· ${pts}`;
+        lbl.textContent = `${club.shortZh} · ${pts}`;
 
         gLabel.addEventListener('mouseenter', (ev) => {
           hoveredTeam = code;
@@ -1176,7 +1096,6 @@
     }
 
     function updateHighlights() {
-      const tr = t();
       const light = isLightTheme();
       const neutralFill = light ? '#cbd5e1' : '#334155';
       const neutralText = light ? '#334155' : '#cbd5e1';
@@ -1188,13 +1107,15 @@
       svg.querySelectorAll('.team-path').forEach(path => {
         const code = path.dataset.team;
         const consecutive = path.dataset.consecutive === '1';
+        const toLive = path.dataset.tolive === '1';
         const club = CLUBS[code];
         const emph = isTeamEmphasized(code);
 
         if (emph) {
           path.setAttribute('stroke', club.color);
-          path.setAttribute('stroke-width', (hoveredTeam === code || pinnedTeams.has(code)) ? (consecutive ? 3.8 : 2.2) : (consecutive ? 2.8 : 1.5));
-          path.setAttribute('stroke-opacity', consecutive ? (anyFocus ? 0.96 : 0.85) : 0.55);
+          const strong = (hoveredTeam === code || pinnedTeams.has(code));
+          path.setAttribute('stroke-width', strong ? (consecutive ? 3.8 : 2.6) : (consecutive ? 2.8 : (toLive ? 2.2 : 1.5)));
+          path.setAttribute('stroke-opacity', consecutive ? (anyFocus ? 0.96 : 0.85) : (toLive ? 0.82 : 0.55));
           if (path.parentNode && path.parentNode.parentNode) {
             path.parentNode.parentNode.appendChild(path.parentNode);
           }
@@ -1235,89 +1156,118 @@
 
       const statusEl = document.getElementById('active-status');
       if (hoveredTeam) {
-        statusEl.textContent = tr.statusHover(CLUBS[hoveredTeam]);
+        statusEl.textContent = `正在预览：${CLUBS[hoveredTeam].zh} (${CLUBS[hoveredTeam].name})`;
       } else if (pinnedTeams.size > 0) {
-        statusEl.textContent = tr.statusPinned([...pinnedTeams].map(c => getClubDisplayName(c, true)).join(' · '));
+        statusEl.textContent = `已锁定对比：${[...pinnedTeams].map(c => CLUBS[c].zh).join(' · ')}`;
       } else {
-        statusEl.textContent = tr.modeStatus[currentMode];
+        const modeNames = {
+          featured: '视觉聚焦模式（Big 6 + 莱斯特城高亮，其余球队清晰可读）',
+          all: '全彩模式（全部 20 队轨迹高亮）',
+          big6: 'Big 6 争冠轨迹对比',
+          champions: '2012 年以来 6 支英超冠军队',
+          darkhorses: '英超新贵与黑马轨迹'
+        };
+        statusEl.textContent = modeNames[currentMode];
       }
     }
 
     // =========================================================================
-    // Tooltip
+    // Rich Tooltip (MP / W-D-L / GF-GA-GD / Last 5 Form)
     // =========================================================================
     function showTooltip(ev, code, sIdx, seasons) {
-      const tr = t();
       const tip = document.getElementById('tooltip');
       const club = CLUBS[code];
       const s = seasons[sIdx];
-      const entryIdx = s.table.findIndex(([c]) => c === code);
+      const entryIdx = s.table.findIndex(r => r[0] === code);
       if (entryIdx === -1) return;
 
+      const [, pts, mp, w, d, l, gf, ga, gd, form] = s.table[entryIdx];
       const rank = entryIdx + 1;
-      const pts = s.table[entryIdx][1];
       const h = clubHistory[code];
 
       const fullIdx = SEASONS.findIndex(x => x.id === s.id);
-      let deltaHtml = `<span class="text-[var(--muted-foreground)]">${tr.tipBaseline}</span>`;
+      let deltaHtml = '<span class="text-[var(--muted-foreground)]">首季基准</span>';
       if (fullIdx > 0) {
         const prevSeason = SEASONS[fullIdx - 1];
-        const prevPos = prevSeason.table.findIndex(([c]) => c === code);
+        const prevPos = prevSeason.table.findIndex(r => r[0] === code);
         if (prevPos === -1) {
-          deltaHtml = `<span style="color:#10B981;font-weight:600">${tr.tipPromoted}</span>`;
+          deltaHtml = '<span style="color:#10B981;font-weight:600">▲ 升班马</span>';
         } else {
           const diff = (prevPos + 1) - rank;
-          if (diff > 0) deltaHtml = `<span style="color:#10B981;font-weight:600">${tr.tipUp(diff)}</span>`;
-          else if (diff < 0) deltaHtml = `<span style="color:#EF4444;font-weight:600">${tr.tipDown(Math.abs(diff))}</span>`;
-          else deltaHtml = `<span class="text-[var(--muted-foreground)]">${tr.tipSame}</span>`;
+          if (diff > 0) deltaHtml = `<span style="color:#10B981;font-weight:600">▲ 上升 ${diff} 名</span>`;
+          else if (diff < 0) deltaHtml = `<span style="color:#EF4444;font-weight:600">▼ 下降 ${Math.abs(diff)} 名</span>`;
+          else deltaHtml = `<span class="text-[var(--muted-foreground)]">● 排名持平</span>`;
         }
       }
 
-      const badge = rank === 1
-        ? `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">${tr.badgeChamp}</span>`
-        : rank <= 4
-          ? `<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-semibold">${tr.badgeUcl}</span>`
-          : rank >= 18
-            ? `<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 font-semibold">${tr.badgeRel}</span>`
-            : '';
+      let badge = '';
+      if (s.live) {
+        badge = '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">LIVE 进行中</span>';
+      } else if (rank === 1) {
+        badge = '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">🏆 冠军</span>';
+      } else if (rank <= 4) {
+        badge = '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-semibold">欧冠区</span>';
+      } else if (rank >= 18) {
+        badge = '<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 font-semibold">降级</span>';
+      }
 
-      const primaryName = uiLang === 'zh' ? club.zh : club.name;
-      const secondaryName = uiLang === 'zh' ? club.name : club.zh;
+      const gfGaText = (gf !== null && ga !== null) ? `${gf} / ${ga}` : '—';
+      const gdColor = gd > 0 ? '#10B981' : gd < 0 ? '#EF4444' : 'var(--muted-foreground)';
+
+      const formBlock = form ? `
+        <div class="flex items-center justify-between mt-2 pt-2 border-t border-[var(--border)]">
+          <span class="text-[11px] text-[var(--muted-foreground)]">近 5 场状态</span>
+          <div class="flex items-center gap-1.5">${renderFormDots(form)}</div>
+        </div>
+      ` : '';
 
       tip.innerHTML = `
         <div class="flex items-center justify-between gap-3 mb-2">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full shrink-0" style="background:${club.color}"></span>
             <div>
-              <div class="font-bold text-sm text-[var(--foreground)] leading-tight flex items-center gap-1.5">
-                <span>${primaryName}</span>
-                ${clubLogoImg(code, 'w-4 h-4')}
-              </div>
-              <div class="text-[11px] text-[var(--muted-foreground)]">${secondaryName}</div>
+              <div class="font-bold text-sm text-[var(--foreground)] leading-tight">${club.zh}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${club.name}</div>
             </div>
           </div>
           ${badge}
         </div>
-        <div class="grid grid-cols-3 gap-1.5 py-2 border-y border-[var(--border)] text-center">
+        <div class="grid grid-cols-4 gap-1.5 py-2 border-y border-[var(--border)] text-center">
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipSeason}</div>
-            <div class="font-mono font-bold">${s.label}</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">赛季</div>
+            <div class="font-mono font-bold">${s.id}</div>
           </div>
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipRank}</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">排名</div>
             <div class="font-mono font-bold text-sm">#${rank}</div>
           </div>
           <div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">${tr.tipPts}</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">积分</div>
             <div class="font-mono font-bold text-sm">${pts}</div>
           </div>
+          <div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">已赛</div>
+            <div class="font-mono font-bold">${mp}场</div>
+          </div>
         </div>
-        <div class="flex items-center justify-between mt-2 text-[11px]">
-          <span>${tr.tipYoY} ${deltaHtml}</span>
-          <span class="text-[var(--muted-foreground)]">${tr.tipAvg(h.avgRank.toFixed(1))}</span>
+        <div class="grid grid-cols-3 gap-1.5 pt-2 text-center">
+          <div class="rounded-md bg-[var(--background)] py-1 px-1.5">
+            <div class="text-[10px] text-[var(--muted-foreground)]">胜 / 平 / 负</div>
+            <div class="font-mono font-semibold text-[11px]">${w}-${d}-${l}</div>
+          </div>
+          <div class="rounded-md bg-[var(--background)] py-1 px-1.5">
+            <div class="text-[10px] text-[var(--muted-foreground)]">进 / 失球</div>
+            <div class="font-mono font-semibold text-[11px]">${gfGaText}</div>
+          </div>
+          <div class="rounded-md bg-[var(--background)] py-1 px-1.5">
+            <div class="text-[10px] text-[var(--muted-foreground)]">净胜球 GD</div>
+            <div class="font-mono font-bold text-[11px]" style="color:${gdColor}">${fmtGD(gd)}</div>
+          </div>
         </div>
-        <div class="mt-1.5 text-[10px] text-[var(--muted-foreground)]">
-          ${pinnedTeams.has(code) ? tr.tipClickUnpin : tr.tipClickPin}
+        ${formBlock}
+        <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-[var(--border)] text-[11px]">
+          <span>较上季：${deltaHtml}</span>
+          <span class="text-[var(--muted-foreground)]">${h.seasons.length ? `完结季均排 #${h.avgRank.toFixed(1)}` : '新晋英超'}</span>
         </div>
       `;
 
@@ -1328,8 +1278,8 @@
     function moveTooltip(ev) {
       const tip = document.getElementById('tooltip');
       const pad = 16;
-      const tw = tip.offsetWidth || 230;
-      const th = tip.offsetHeight || 140;
+      const tw = tip.offsetWidth || 260;
+      const th = tip.offsetHeight || 200;
       let left = ev.clientX + pad;
       let top = ev.clientY + pad;
       if (left + tw > window.innerWidth - 10) left = ev.clientX - tw - pad;
@@ -1364,20 +1314,10 @@
       });
     });
 
-    document.querySelectorAll('.uilang-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const nextLang = btn.dataset.uilang;
-        if (nextLang === uiLang) return;
-        uiLang = nextLang;
-        localStorage.setItem('pl_ui_lang', uiLang);
-        if (uiLang === 'en') labelLang = 'en';
-        applyStaticTranslations();
-        updateControlButtons();
-        renderClubChips();
-        renderChampionsTimeline();
-        renderPinnedCards();
-        renderChart();
-      });
+    document.getElementById('toggle-live').addEventListener('click', () => {
+      includeLive = !includeLive;
+      updateControlButtons();
+      renderChart();
     });
 
     document.getElementById('toggle-lang').addEventListener('click', () => {
@@ -1401,7 +1341,6 @@
     });
 
     // Initial render
-    applyStaticTranslations();
     updateControlButtons();
     renderClubChips();
     renderChampionsTimeline();
