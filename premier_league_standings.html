@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英超历年最终排名全景图 (2012–13 至 2025–26)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --card: #111827;
+      --border: #1f2937;
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+      --primary: #38bdf8;
+      --primary-foreground: #082f49;
+    }
+    html.light {
+      --background: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --foreground: #0f172a;
+      --muted-foreground: #64748b;
+      --primary: #0284c7;
+      --primary-foreground: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background: var(--background);
+      color: var(--foreground);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .chart-scroll::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    .chart-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chart-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+    }
+    .team-path {
+      transition: opacity 0.22s ease, stroke-width 0.22s ease, filter 0.22s ease;
+    }
+    .team-node {
+      transition: opacity 0.22s ease, transform 0.18s ease;
+      cursor: pointer;
+    }
+    .team-node:hover {
+      filter: brightness(1.1);
+    }
+    .pill-btn {
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .pill-btn:hover {
+      transform: translateY(-1px);
+    }
+    #tooltip {
+      pointer-events: none;
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-5 space-y-4">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2.5 mb-1">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] tracking-wide">
+            PREMIER LEAGUE
+          </span>
+          <span class="text-xs text-[var(--muted-foreground)] font-mono">2012–13 → 2025–26 · 14 完整赛季</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+          英超历年最终排名全景图
+        </h1>
+        <p class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
+          一图纵览 2012 年以来全部 14 个赛季第 1–20 名轨迹 · 悬停查看积分详情 · 点击任意球队锁定对比
+        </p>
+      </div>
+
+      <!-- Quick KPI Cards -->
+      <div class="grid grid-cols-3 gap-2.5 shrink-0">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
+          <div class="text-xs text-[var(--muted-foreground)]">夺冠最多</div>
+          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#38BDF8"></span>
+            <span>曼城 <span class="font-mono text-[var(--primary)]">7</span> 冠</span>
+          </div>
+        </div>
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
+          <div class="text-xs text-[var(--muted-foreground)]">最新冠军 (25–26)</div>
+          <div class="text-sm sm:text-base font-bold mt-0.5 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:#EF4444"></span>
+            <span>阿森纳 <span class="font-mono">85分</span></span>
+          </div>
+        </div>
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
+          <div class="text-xs text-[var(--muted-foreground)]">14 季全勤球队</div>
+          <div id="ever-present-count" class="text-sm sm:text-base font-bold mt-0.5 font-mono">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 sm:p-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Preset Modes -->
+        <div class="flex flex-wrap items-center gap-1.5" id="mode-buttons">
+          <button data-mode="featured" class="pill-btn px-3 py-1.5 rounded-lg text-xs font-medium border">
+            ✨ 视觉聚焦（Big 6 + 奇迹冠军）
+          </button>
+          <button data-mode="all" class="pill-btn px-3 py-1.5 rounded-lg text-xs font-medium border">
+            🌈 全部 20 队全彩
+          </button>
+          <button data-mode="big6" class="pill-btn px-3 py-1.5 rounded-lg text-xs font-medium border">
+            ⚔️ 仅看 Big 6
+          </button>
+          <button data-mode="champions" class="pill-btn px-3 py-1.5 rounded-lg text-xs font-medium border">
+            🏆 历届冠军队 (6 队)
+          </button>
+          <button data-mode="darkhorses" class="pill-btn px-3 py-1.5 rounded-lg text-xs font-medium border">
+            🚀 新贵与黑马
+          </button>
+        </div>
+
+        <!-- Right Controls: Season Range, Labels & Theme -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--background)] p-0.5 text-xs">
+            <button data-range="all" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">全部 14 季</button>
+            <button data-range="10" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 10 季</button>
+            <button data-range="6" class="range-btn px-2.5 py-1 rounded-md font-medium cursor-pointer">近 6 季</button>
+          </div>
+          <button id="toggle-lang" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
+            节点标签：英文简称
+          </button>
+          <button id="toggle-theme" class="pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)]">
+            ☀️ 浅色模式
+          </button>
+          <button id="clear-pins" class="hidden pill-btn px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            清除锁定
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Club Selector -->
+      <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)] overflow-x-auto chart-scroll pb-1">
+        <span class="text-xs text-[var(--muted-foreground)] shrink-0 font-medium">点击锁定对比：</span>
+        <div id="club-chips" class="flex items-center gap-1.5 shrink-0"></div>
+      </div>
+    </div>
+
+    <!-- Main Chart Card -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 sm:p-4 relative">
+      <!-- Legend strip -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-1 text-xs text-[var(--muted-foreground)]">
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(245,158,11,0.28);border:1px solid #F59E0B"></span>
+            第 1 名 · 冠军
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(16,185,129,0.16);border:1px solid #10B981"></span>
+            第 1–4 名 · 欧冠区
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(59,130,246,0.14);border:1px solid #3B82F6"></span>
+            第 5–6 名 · 欧战区
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-sm inline-block" style="background:rgba(239,68,68,0.16);border:1px solid #EF4444"></span>
+            第 18–20 名 · 降级区
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-5 border-t-2 border-dashed border-[var(--muted-foreground)] inline-block"></span>
+            降级后重返英超
+          </span>
+        </div>
+        <div id="active-status" class="text-xs font-medium text-[var(--foreground)]"></div>
+      </div>
+
+      <!-- SVG Container -->
+      <div class="w-full overflow-x-auto chart-scroll">
+        <svg id="bump-chart" class="block select-none" role="img" aria-label="英超历年排名走势图"></svg>
+      </div>
+    </div>
+
+    <!-- Bottom Detail & Team Stats Drawer -->
+    <div id="team-summary-bar" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-semibold text-[var(--foreground)]">2012–26 历届冠军与高光时刻</h2>
+          <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+            点击上方任意球队标签或图中节点，可在此查看该队 14 赛季完整排名曲线与统计摘要
+          </p>
+        </div>
+        <div id="champions-timeline" class="flex flex-wrap gap-1.5"></div>
+      </div>
+      <div id="pinned-cards" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3 pt-3 border-t border-[var(--border)]"></div>
+    </div>
+  </div>
+
+  <!-- Floating Tooltip -->
+  <div id="tooltip" class="fixed z-50 hidden min-w-[210px] rounded-xl border border-[var(--border)] bg-[var(--card)]/95 shadow-xl p-3 text-xs"></div>
+
+  <script>
+    // =========================================================================
+    // Verified Premier League Final Standings Data (2012-13 through 2025-26)
+    // =========================================================================
+    const CLUBS = {
+      MCI: { name: 'Manchester City', zh: '曼城', shortZh: '曼城', color: '#38BDF8', tier: 'big6' },
+      ARS: { name: 'Arsenal', zh: '阿森纳', shortZh: '阿森纳', color: '#EF4444', tier: 'big6' },
+      LIV: { name: 'Liverpool', zh: '利物浦', shortZh: '利物浦', color: '#E11D48', tier: 'big6' },
+      CHE: { name: 'Chelsea', zh: '切尔西', shortZh: '切尔西', color: '#2563EB', tier: 'big6' },
+      MUN: { name: 'Manchester United', zh: '曼联', shortZh: '曼联', color: '#F97316', tier: 'big6' },
+      TOT: { name: 'Tottenham Hotspur', zh: '热刺', shortZh: '热刺', color: '#8B5CF6', tier: 'big6' },
+      LEI: { name: 'Leicester City', zh: '莱斯特城', shortZh: '莱斯特', color: '#06B6D4', tier: 'champ' },
+      AVL: { name: 'Aston Villa', zh: '阿斯顿维拉', shortZh: '维拉', color: '#A855F7', tier: 'horse' },
+      NEW: { name: 'Newcastle United', zh: '纽卡斯尔', shortZh: '纽卡', color: '#14B8A6', tier: 'horse' },
+      BHA: { name: 'Brighton & Hove Albion', zh: '布莱顿', shortZh: '布莱顿', color: '#0EA5E9', tier: 'horse' },
+      NFO: { name: 'Nottingham Forest', zh: '诺丁汉森林', shortZh: '森林', color: '#EC4899', tier: 'horse' },
+      BOU: { name: 'AFC Bournemouth', zh: '伯恩茅斯', shortZh: '樱桃', color: '#DC2626', tier: 'horse' },
+      EVE: { name: 'Everton', zh: '埃弗顿', shortZh: '埃弗顿', color: '#3B82F6', tier: 'mid' },
+      WHU: { name: 'West Ham United', zh: '西汉姆联', shortZh: '西汉姆', color: '#BE185D', tier: 'mid' },
+      CRY: { name: 'Crystal Palace', zh: '水晶宫', shortZh: '水晶宫', color: '#6366F1', tier: 'mid' },
+      WOL: { name: 'Wolverhampton Wanderers', zh: '狼队', shortZh: '狼队', color: '#F59E0B', tier: 'mid' },
+      FUL: { name: 'Fulham', zh: '富勒姆', shortZh: '富勒姆', color: '#64748B', tier: 'mid' },
+      BRE: { name: 'Brentford', zh: '布伦特福德', shortZh: '小蜜蜂', color: '#FB7185', tier: 'horse' },
+      SOU: { name: 'Southampton', zh: '南安普顿', shortZh: '圣徒', color: '#F43F5E', tier: 'mid' },
+      BUR: { name: 'Burnley', zh: '伯恩利', shortZh: '伯恩利', color: '#9D174D', tier: 'mid' },
+      SUN: { name: 'Sunderland', zh: '桑德兰', shortZh: '桑德兰', color: '#FB923C', tier: 'horse' },
+      LEE: { name: 'Leeds United', zh: '利兹联', shortZh: '利兹联', color: '#EAB308', tier: 'mid' },
+      STK: { name: 'Stoke City', zh: '斯托克城', shortZh: '斯托克', color: '#94A3B8', tier: 'other' },
+      SWA: { name: 'Swansea City', zh: '斯旺西', shortZh: '斯旺西', color: '#94A3B8', tier: 'other' },
+      WBA: { name: 'West Bromwich Albion', zh: '西布朗', shortZh: '西布朗', color: '#64748B', tier: 'other' },
+      WAT: { name: 'Watford', zh: '沃特福德', shortZh: '沃特福', color: '#D97706', tier: 'other' },
+      NOR: { name: 'Norwich City', zh: '诺维奇', shortZh: '诺维奇', color: '#84CC16', tier: 'other' },
+      SHU: { name: 'Sheffield United', zh: '谢菲尔德联', shortZh: '谢菲联', color: '#F87171', tier: 'other' },
+      HUL: { name: 'Hull City', zh: '赫尔城', shortZh: '赫尔城', color: '#F59E0B', tier: 'other' },
+      QPR: { name: 'Queens Park Rangers', zh: '女王公园巡游者', shortZh: 'QPR', color: '#60A5FA', tier: 'other' },
+      CAR: { name: 'Cardiff City', zh: '卡迪夫城', shortZh: '卡迪夫', color: '#38BDF8', tier: 'other' },
+      HUD: { name: 'Huddersfield Town', zh: '哈德斯菲尔德', shortZh: '哈镇', color: '#7DD3FC', tier: 'other' },
+      WIG: { name: 'Wigan Athletic', zh: '维冈竞技', shortZh: '维冈', color: '#60A5FA', tier: 'other' },
+      RDG: { name: 'Reading', zh: '雷丁', shortZh: '雷丁', color: '#818CF8', tier: 'other' },
+      MID: { name: 'Middlesbrough', zh: '米德尔斯堡', shortZh: '米堡', color: '#F87171', tier: 'other' },
+      LUT: { name: 'Luton Town', zh: '卢顿', shortZh: '卢顿', color: '#FB923C', tier: 'other' },
+      IPS: { name: 'Ipswich Town', zh: '伊普斯维奇', shortZh: '伊镇', color: '#3B82F6', tier: 'other' }
+    };
+
+    const SEASONS = [
+      {
+        id: '12-13', label: '2012–13',
+        table: [
+          ['MUN',89],['MCI',78],['CHE',75],['ARS',73],['TOT',72],
+          ['EVE',63],['LIV',61],['WBA',49],['SWA',46],['WHU',46],
+          ['NOR',44],['FUL',43],['STK',42],['SOU',41],['AVL',41],
+          ['NEW',41],['SUN',39],['WIG',36],['RDG',28],['QPR',25]
+        ]
+      },
+      {
+        id: '13-14', label: '2013–14',
+        table: [
+          ['MCI',86],['LIV',84],['CHE',82],['ARS',79],['EVE',72],
+          ['TOT',69],['MUN',64],['SOU',56],['STK',50],['NEW',49],
+          ['CRY',45],['SWA',42],['WHU',40],['SUN',38],['AVL',38],
+          ['HUL',37],['WBA',36],['NOR',33],['FUL',32],['CAR',30]
+        ]
+      },
+      {
+        id: '14-15', label: '2014–15',
+        table: [
+          ['CHE',87],['MCI',79],['ARS',75],['MUN',70],['TOT',64],
+          ['LIV',62],['SOU',60],['SWA',56],['STK',54],['CRY',48],
+          ['EVE',47],['WHU',47],['WBA',44],['LEI',41],['NEW',39],
+          ['SUN',38],['AVL',38],['HUL',35],['BUR',33],['QPR',30]
+        ]
+      },
+      {
+        id: '15-16', label: '2015–16',
+        table: [
+          ['LEI',81],['ARS',71],['TOT',70],['MCI',66],['MUN',66],
+          ['SOU',63],['WHU',62],['LIV',60],['STK',51],['CHE',50],
+          ['EVE',47],['SWA',47],['WAT',45],['WBA',43],['CRY',42],
+          ['BOU',42],['SUN',39],['NEW',37],['NOR',34],['AVL',17]
+        ]
+      },
+      {
+        id: '16-17', label: '2016–17',
+        table: [
+          ['CHE',93],['TOT',86],['MCI',78],['LIV',76],['ARS',75],
+          ['MUN',69],['EVE',61],['SOU',46],['BOU',46],['WBA',45],
+          ['WHU',45],['LEI',44],['STK',44],['CRY',41],['SWA',41],
+          ['BUR',40],['WAT',40],['HUL',34],['MID',28],['SUN',24]
+        ]
+      },
+      {
+        id: '17-18', label: '2017–18',
+        table: [
+          ['MCI',100],['MUN',81],['TOT',77],['LIV',75],['CHE',70],
+          ['ARS',63],['BUR',54],['EVE',49],['LEI',47],['NEW',44],
+          ['CRY',44],['BOU',44],['WHU',42],['WAT',41],['BHA',40],
+          ['HUD',37],['SOU',36],['SWA',33],['STK',33],['WBA',31]
+        ]
+      },
+      {
+        id: '18-19', label: '2018–19',
+        table: [
+          ['MCI',98],['LIV',97],['CHE',72],['TOT',71],['ARS',70],
+          ['MUN',66],['WOL',57],['EVE',54],['LEI',52],['WHU',52],
+          ['WAT',50],['CRY',49],['NEW',45],['BOU',45],['BUR',40],
+          ['SOU',39],['BHA',36],['CAR',34],['FUL',26],['HUD',16]
+        ]
+      },
+      {
+        id: '19-20', label: '2019–20',
+        table: [
+          ['LIV',99],['MCI',81],['MUN',66],['CHE',66],['LEI',62],
+          ['TOT',59],['WOL',59],['ARS',56],['SHU',54],['BUR',54],
+          ['SOU',52],['EVE',49],['NEW',44],['CRY',43],['BHA',41],
+          ['WHU',39],['AVL',35],['BOU',34],['WAT',34],['NOR',21]
+        ]
+      },
+      {
+        id: '20-21', label: '2020–21',
+        table: [
+          ['MCI',86],['MUN',74],['LIV',69],['CHE',67],['LEI',66],
+          ['WHU',65],['TOT',62],['ARS',61],['LEE',59],['EVE',59],
+          ['AVL',55],['NEW',45],['WOL',45],['CRY',44],['SOU',43],
+          ['BHA',41],['BUR',39],['FUL',28],['WBA',26],['SHU',23]
+        ]
+      },
+      {
+        id: '21-22', label: '2021–22',
+        table: [
+          ['MCI',93],['LIV',92],['CHE',74],['TOT',71],['ARS',69],
+          ['MUN',58],['WHU',56],['LEI',52],['BHA',51],['WOL',51],
+          ['NEW',49],['CRY',48],['BRE',46],['AVL',45],['SOU',40],
+          ['EVE',39],['LEE',38],['BUR',35],['WAT',23],['NOR',22]
+        ]
+      },
+      {
+        id: '22-23', label: '2022–23',
+        table: [
+          ['MCI',89],['ARS',84],['MUN',75],['NEW',71],['LIV',67],
+          ['BHA',62],['AVL',61],['TOT',60],['BRE',59],['FUL',52],
+          ['CRY',45],['CHE',44],['WOL',41],['WHU',40],['BOU',39],
+          ['NFO',38],['EVE',36],['LEI',34],['LEE',31],['SOU',25]
+        ]
+      },
+      {
+        id: '23-24', label: '2023–24',
+        table: [
+          ['MCI',91],['ARS',89],['LIV',82],['AVL',68],['TOT',66],
+          ['CHE',63],['NEW',60],['MUN',60],['WHU',52],['CRY',49],
+          ['BHA',48],['BOU',48],['FUL',47],['WOL',46],['EVE',40],
+          ['BRE',39],['NFO',32],['LUT',26],['BUR',24],['SHU',16]
+        ]
+      },
+      {
+        id: '24-25', label: '2024–25',
+        table: [
+          ['LIV',84],['ARS',74],['MCI',71],['CHE',69],['NEW',66],
+          ['AVL',66],['NFO',65],['BHA',61],['BOU',56],['BRE',56],
+          ['FUL',54],['CRY',53],['EVE',48],['WHU',43],['MUN',42],
+          ['WOL',42],['TOT',38],['LEI',25],['IPS',22],['SOU',12]
+        ]
+      },
+      {
+        id: '25-26', label: '2025–26',
+        table: [
+          ['ARS',85],['MCI',78],['MUN',71],['AVL',65],['LIV',60],
+          ['BOU',57],['SUN',54],['BHA',53],['BRE',53],['CHE',52],
+          ['FUL',52],['NEW',49],['EVE',49],['LEE',47],['CRY',45],
+          ['NFO',44],['TOT',41],['WHU',39],['BUR',22],['WOL',20]
+        ]
+      }
+    ];
+
+    // Precompute club histories across all 14 seasons
+    const clubHistory = {};
+    Object.keys(CLUBS).forEach(code => {
+      clubHistory[code] = {
+        code,
+        seasons: [],
+        best: 99,
+        worst: 0,
+        titles: 0,
+        top4: 0,
+        relegations: 0,
+        avgRank: 0
+      };
+    });
+
+    SEASONS.forEach((s, sIdx) => {
+      s.table.forEach(([code, pts], idx) => {
+        const rank = idx + 1;
+        const h = clubHistory[code];
+        h.seasons.push({ sIdx, season: s.label, id: s.id, rank, pts });
+        if (rank < h.best) h.best = rank;
+        if (rank > h.worst) h.worst = rank;
+        if (rank === 1) h.titles++;
+        if (rank <= 4) h.top4++;
+        if (rank >= 18) h.relegations++;
+      });
+    });
+
+    Object.values(clubHistory).forEach(h => {
+      if (h.seasons.length > 0) {
+        h.avgRank = h.seasons.reduce((a, b) => a + b.rank, 0) / h.seasons.length;
+      }
+    });
+
+    // Ever-present clubs across all 14 seasons
+    const everPresent = Object.values(clubHistory).filter(h => h.seasons.length === SEASONS.length);
+    document.getElementById('ever-present-count').textContent = `${everPresent.length} 支`;
+
+    // State
+    let currentMode = 'featured'; // featured | all | big6 | champions | darkhorses
+    let currentRange = 'all';     // all | 10 | 6
+    let labelLang = 'en';         // en | zh
+    let pinnedTeams = new Set();
+    let hoveredTeam = null;
+
+    const BIG6 = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT']);
+    const CHAMPIONS = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'LEI']);
+    const FEATURED = new Set(['MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT', 'LEI']);
+    const DARKHORSES = new Set(['AVL', 'NEW', 'BHA', 'NFO', 'BOU', 'BRE', 'SUN', 'LEI']);
+
+    const CHIP_ORDER = [
+      'MCI', 'ARS', 'LIV', 'CHE', 'MUN', 'TOT', 'LEI',
+      'AVL', 'NEW', 'BHA', 'NFO', 'BOU', 'BRE', 'EVE',
+      'WHU', 'CRY', 'FUL', 'WOL', 'SUN', 'LEE', 'SOU', 'BUR'
+    ];
+
+    function getVisibleSeasons() {
+      if (currentRange === '10') return SEASONS.slice(-10);
+      if (currentRange === '6') return SEASONS.slice(-6);
+      return SEASONS;
+    }
+
+    function isTeamEmphasized(code) {
+      if (hoveredTeam) return code === hoveredTeam || pinnedTeams.has(code);
+      if (pinnedTeams.size > 0) return pinnedTeams.has(code);
+      if (currentMode === 'all') return true;
+      if (currentMode === 'big6') return BIG6.has(code);
+      if (currentMode === 'champions') return CHAMPIONS.has(code);
+      if (currentMode === 'darkhorses') return DARKHORSES.has(code);
+      return FEATURED.has(code);
+    }
+
+    function isLightTheme() {
+      return document.documentElement.classList.contains('light');
+    }
+
+    function getCssVar(name, fallback) {
+      const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return val || fallback;
+    }
+
+    // Build quick club chips
+    function renderClubChips() {
+      const container = document.getElementById('club-chips');
+      container.innerHTML = '';
+      CHIP_ORDER.forEach(code => {
+        const club = CLUBS[code];
+        const isPinned = pinnedTeams.has(code);
+        const btn = document.createElement('button');
+        btn.className = `pill-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border shrink-0`;
+        if (isPinned) {
+          btn.style.background = club.color;
+          btn.style.borderColor = club.color;
+          btn.style.color = '#ffffff';
+        } else {
+          btn.style.background = 'var(--background)';
+          btn.style.borderColor = 'var(--border)';
+          btn.style.color = 'var(--foreground)';
+        }
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${isPinned ? '#fff' : club.color}"></span>${club.zh}`;
+        btn.addEventListener('click', () => togglePin(code));
+        btn.addEventListener('mouseenter', () => {
+          hoveredTeam = code;
+          updateHighlights();
+        });
+        btn.addEventListener('mouseleave', () => {
+          hoveredTeam = null;
+          updateHighlights();
+        });
+        container.appendChild(btn);
+      });
+
+      const clearBtn = document.getElementById('clear-pins');
+      if (pinnedTeams.size > 0) {
+        clearBtn.classList.remove('hidden');
+        clearBtn.textContent = `清除锁定 (${pinnedTeams.size})`;
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+    }
+
+    // Render champions timeline badges
+    function renderChampionsTimeline() {
+      const container = document.getElementById('champions-timeline');
+      container.innerHTML = '';
+      SEASONS.forEach(s => {
+        const [champCode, pts] = s.table[0];
+        const club = CLUBS[champCode];
+        const chip = document.createElement('button');
+        chip.className = 'pill-btn inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs border border-[var(--border)] bg-[var(--background)]';
+        chip.title = `${s.label} 冠军：${club.zh} (${pts}分)`;
+        chip.innerHTML = `
+          <span class="font-mono text-[11px] text-[var(--muted-foreground)]">${s.id}</span>
+          <span class="w-2 h-2 rounded-full" style="background:${club.color}"></span>
+          <span class="font-semibold">${club.shortZh}</span>
+        `;
+        chip.addEventListener('click', () => togglePin(champCode));
+        container.appendChild(chip);
+      });
+    }
+
+    function renderPinnedCards() {
+      const box = document.getElementById('pinned-cards');
+      if (pinnedTeams.size === 0) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = '';
+
+      pinnedTeams.forEach(code => {
+        const club = CLUBS[code];
+        const h = clubHistory[code];
+        const card = document.createElement('div');
+        card.className = 'rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 flex flex-col gap-2';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background:${club.color}"></span>
+              <span class="font-bold text-sm">${club.zh}</span>
+              <span class="text-xs text-[var(--muted-foreground)]">${club.name}</span>
+            </div>
+            <button data-unpin="${code}" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded cursor-pointer">✕</button>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
+              <div class="text-[11px] text-[var(--muted-foreground)]">冠军</div>
+              <div class="font-mono font-bold text-sm">${h.titles}</div>
+            </div>
+            <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
+              <div class="text-[11px] text-[var(--muted-foreground)]">最高排名</div>
+              <div class="font-mono font-bold text-sm">#${h.best}</div>
+            </div>
+            <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
+              <div class="text-[11px] text-[var(--muted-foreground)]">平均排名</div>
+              <div class="font-mono font-bold text-sm">${h.avgRank.toFixed(1)}</div>
+            </div>
+            <div class="rounded-lg bg-[var(--card)] border border-[var(--border)] py-1.5">
+              <div class="text-[11px] text-[var(--muted-foreground)]">在籍/降级</div>
+              <div class="font-mono font-bold text-sm">${h.seasons.length}/${h.relegations}</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1 pt-0.5">
+            ${h.seasons.map(item => `
+              <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-mono border border-[var(--border)]"
+                style="${item.rank === 1 ? 'background:rgba(245,158,11,0.18);border-color:#F59E0B;font-weight:700;' : item.rank >= 18 ? 'background:rgba(239,68,68,0.14);border-color:rgba(239,68,68,0.5);' : ''}">
+                <span class="text-[var(--muted-foreground)]">${item.id}:</span><span>#${item.rank}</span>
+              </span>
+            `).join('')}
+          </div>
+        `;
+        card.querySelector('[data-unpin]').addEventListener('click', () => togglePin(code));
+        box.appendChild(card);
+      });
+    }
+
+    function togglePin(code) {
+      if (pinnedTeams.has(code)) {
+        pinnedTeams.delete(code);
+      } else {
+        pinnedTeams.add(code);
+      }
+      renderClubChips();
+      renderPinnedCards();
+      updateHighlights();
+    }
+
+    // Update mode & range buttons styling
+    function updateControlButtons() {
+      document.querySelectorAll('#mode-buttons button').forEach(btn => {
+        const active = btn.dataset.mode === currentMode;
+        if (active) {
+          btn.style.background = 'var(--primary)';
+          btn.style.borderColor = 'var(--primary)';
+          btn.style.color = 'var(--primary-foreground)';
+        } else {
+          btn.style.background = 'var(--background)';
+          btn.style.borderColor = 'var(--border)';
+          btn.style.color = 'var(--foreground)';
+        }
+      });
+
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        const active = btn.dataset.range === currentRange;
+        if (active) {
+          btn.style.background = 'var(--primary)';
+          btn.style.color = 'var(--primary-foreground)';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--muted-foreground)';
+        }
+      });
+
+      document.getElementById('toggle-lang').textContent =
+        labelLang === 'en' ? '节点标签：英文简称' : '节点标签：中文简称';
+
+      document.getElementById('toggle-theme').textContent =
+        isLightTheme() ? '🌙 深色模式' : '☀️ 浅色模式';
+    }
+
+    // =========================================================================
+    // Main SVG Bump Chart Renderer
+    // =========================================================================
+    function renderChart() {
+      const svg = document.getElementById('bump-chart');
+      const seasons = getVisibleSeasons();
+      const numSeasons = seasons.length;
+      const numRanks = 20;
+
+      const padLeft = 58;
+      const padRight = 104;
+      const padTop = 44;
+      const padBottom = 34;
+
+      const colStep = numSeasons >= 12 ? 84 : numSeasons >= 8 ? 102 : 136;
+      const rowStep = 31;
+
+      const width = padLeft + (numSeasons - 1) * colStep + padRight;
+      const height = padTop + (numRanks - 1) * rowStep + padBottom;
+
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.setAttribute('width', width);
+      svg.setAttribute('height', height);
+      svg.innerHTML = '';
+
+      const ns = 'http://www.w3.org/2000/svg';
+      const el = (tag, attrs = {}, parent = null) => {
+        const node = document.createElementNS(ns, tag);
+        Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+        if (parent) parent.appendChild(node);
+        return node;
+      };
+
+      const xOf = (sIdx) => padLeft + sIdx * colStep;
+      const yOf = (rank) => padTop + (rank - 1) * rowStep;
+
+      const light = isLightTheme();
+      const fg = getCssVar('--foreground', light ? '#0f172a' : '#f8fafc');
+      const muted = getCssVar('--muted-foreground', light ? '#64748b' : '#94a3b8');
+      const border = getCssVar('--border', light ? '#e2e8f0' : '#334155');
+      const cardBg = getCssVar('--card', light ? '#ffffff' : '#111827');
+
+      // Defs for glow
+      const defs = el('defs', {}, svg);
+      const glow = el('filter', { id: 'gold-glow', x: '-30%', y: '-30%', width: '160%', height: '160%' }, defs);
+      el('feGaussianBlur', { stdDeviation: '2.5', result: 'blur' }, glow);
+      const merge = el('feMerge', {}, glow);
+      el('feMergeNode', { in: 'blur' }, merge);
+      el('feMergeNode', { in: 'SourceGraphic' }, merge);
+
+      // 1. Background Zone Bands
+      const zonesLayer = el('g', { class: 'zones-layer' }, svg);
+
+      // Rank 1 Champion Gold Band
+      el('rect', {
+        x: 6, y: yOf(1) - rowStep / 2,
+        width: width - 12, height: rowStep,
+        rx: 8,
+        fill: light ? 'rgba(245, 158, 11, 0.11)' : 'rgba(245, 158, 11, 0.14)'
+      }, zonesLayer);
+
+      // Rank 2-4 UCL Band
+      el('rect', {
+        x: 6, y: yOf(2) - rowStep / 2,
+        width: width - 12, height: rowStep * 3,
+        rx: 6,
+        fill: light ? 'rgba(16, 185, 129, 0.06)' : 'rgba(16, 185, 129, 0.08)'
+      }, zonesLayer);
+
+      // Rank 5-6 Europa Band
+      el('rect', {
+        x: 6, y: yOf(5) - rowStep / 2,
+        width: width - 12, height: rowStep * 2,
+        rx: 6,
+        fill: light ? 'rgba(59, 130, 246, 0.05)' : 'rgba(59, 130, 246, 0.07)'
+      }, zonesLayer);
+
+      // Rank 18-20 Relegation Band
+      el('rect', {
+        x: 6, y: yOf(18) - rowStep / 2,
+        width: width - 12, height: rowStep * 3,
+        rx: 8,
+        fill: light ? 'rgba(239, 68, 68, 0.07)' : 'rgba(239, 68, 68, 0.10)'
+      }, zonesLayer);
+
+      // Left accent bars for zones
+      el('rect', { x: 8, y: yOf(1) - rowStep / 2 + 2, width: 3.5, height: rowStep - 4, rx: 2, fill: '#F59E0B' }, zonesLayer);
+      el('rect', { x: 8, y: yOf(2) - rowStep / 2 + 2, width: 3.5, height: rowStep * 3 - 4, rx: 2, fill: '#10B981' }, zonesLayer);
+      el('rect', { x: 8, y: yOf(5) - rowStep / 2 + 2, width: 3.5, height: rowStep * 2 - 4, rx: 2, fill: '#3B82F6' }, zonesLayer);
+      el('rect', { x: 8, y: yOf(18) - rowStep / 2 + 2, width: 3.5, height: rowStep * 3 - 4, rx: 2, fill: '#EF4444' }, zonesLayer);
+
+      // Dashed divider lines (Top 4 & Relegation)
+      el('line', {
+        x1: padLeft - 24, x2: width - padRight + 24,
+        y1: yOf(4) + rowStep / 2, y2: yOf(4) + rowStep / 2,
+        stroke: '#10B981', 'stroke-opacity': 0.35, 'stroke-dasharray': '4 4', 'stroke-width': 1
+      }, zonesLayer);
+
+      el('line', {
+        x1: padLeft - 24, x2: width - padRight + 24,
+        y1: yOf(17) + rowStep / 2, y2: yOf(17) + rowStep / 2,
+        stroke: '#EF4444', 'stroke-opacity': 0.45, 'stroke-dasharray': '4 4', 'stroke-width': 1
+      }, zonesLayer);
+
+      // 2. Grid lines & Axis Labels
+      const gridLayer = el('g', { class: 'grid-layer' }, svg);
+
+      for (let r = 1; r <= numRanks; r++) {
+        const y = yOf(r);
+        el('line', {
+          x1: padLeft, x2: xOf(numSeasons - 1),
+          y1: y, y2: y,
+          stroke: border, 'stroke-opacity': 0.3, 'stroke-width': 0.75
+        }, gridLayer);
+
+        const rankColor = r === 1 ? '#F59E0B' : r <= 4 ? '#10B981' : r >= 18 ? '#EF4444' : muted;
+        const txt = el('text', {
+          x: 24, y: y + 4,
+          fill: rankColor,
+          'font-size': r === 1 ? '12' : '11',
+          'font-weight': r === 1 || r <= 4 || r >= 18 ? '700' : '500',
+          'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+        }, gridLayer);
+        txt.textContent = r === 1 ? '1🏆' : String(r);
+      }
+
+      seasons.forEach((s, idx) => {
+        const x = xOf(idx);
+        el('line', {
+          x1: x, x2: x,
+          y1: padTop - 16, y2: yOf(numRanks) + 14,
+          stroke: border, 'stroke-opacity': 0.45, 'stroke-width': 1
+        }, gridLayer);
+
+        const topLabel = el('text', {
+          x, y: 20,
+          'text-anchor': 'middle',
+          fill: idx === numSeasons - 1 ? fg : muted,
+          'font-size': '12',
+          'font-weight': idx === numSeasons - 1 ? '700' : '600',
+          'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+        }, gridLayer);
+        topLabel.textContent = s.label;
+
+        const botLabel = el('text', {
+          x, y: height - 8,
+          'text-anchor': 'middle',
+          fill: muted,
+          'font-size': '11',
+          'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace'
+        }, gridLayer);
+        botLabel.textContent = s.id;
+      });
+
+      // 3. Collect paths per team within visible seasons
+      const teamPoints = {};
+      seasons.forEach((s, sIdx) => {
+        s.table.forEach(([code, pts], idx) => {
+          if (!teamPoints[code]) teamPoints[code] = [];
+          teamPoints[code].push({ sIdx, season: s.label, id: s.id, rank: idx + 1, pts });
+        });
+      });
+
+      // 4. Draw Paths
+      const pathsLayer = el('g', { class: 'paths-layer' }, svg);
+      const nodesLayer = el('g', { class: 'nodes-layer' }, svg);
+      const rightLabelsLayer = el('g', { class: 'right-labels-layer' }, svg);
+
+      Object.entries(teamPoints).forEach(([code, ptsList]) => {
+        const club = CLUBS[code];
+        const gTeam = el('g', { 'data-team': code, class: 'team-path-group' }, pathsLayer);
+
+        for (let i = 0; i < ptsList.length - 1; i++) {
+          const a = ptsList[i];
+          const b = ptsList[i + 1];
+          const x1 = xOf(a.sIdx), y1 = yOf(a.rank);
+          const x2 = xOf(b.sIdx), y2 = yOf(b.rank);
+          const consecutive = (b.sIdx - a.sIdx) === 1;
+
+          const dx = (x2 - x1) * 0.48;
+          const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+          el('path', {
+            d,
+            fill: 'none',
+            stroke: club.color,
+            'stroke-linecap': 'round',
+            'stroke-dasharray': consecutive ? 'none' : '4 5',
+            'data-consecutive': consecutive ? '1' : '0',
+            'data-team': code,
+            class: 'team-path'
+          }, gTeam);
+        }
+      });
+
+      // 5. Draw Nodes
+      seasons.forEach((s, sIdx) => {
+        const x = xOf(sIdx);
+        s.table.forEach(([code, pts], idx) => {
+          const rank = idx + 1;
+          const y = yOf(rank);
+          const club = CLUBS[code];
+
+          const gNode = el('g', {
+            class: 'team-node',
+            'data-team': code,
+            'data-sidx': sIdx,
+            'data-rank': rank,
+            'data-pts': pts
+          }, nodesLayer);
+
+          const isChamp = rank === 1;
+          const pillW = labelLang === 'zh' ? 44 : 38;
+          const pillH = isChamp ? 22 : 19;
+
+          el('rect', {
+            x: x - pillW / 2,
+            y: y - pillH / 2,
+            width: pillW,
+            height: pillH,
+            rx: isChamp ? 11 : 9.5,
+            fill: club.color,
+            stroke: isChamp ? '#F59E0B' : cardBg,
+            'stroke-width': isChamp ? 2.2 : 1.5,
+            filter: isChamp ? 'url(#gold-glow)' : 'none',
+            class: 'node-rect'
+          }, gNode);
+
+          const txt = el('text', {
+            x,
+            y: y + 3.5,
+            'text-anchor': 'middle',
+            fill: '#ffffff',
+            'font-size': labelLang === 'zh' ? '10' : '9.5',
+            'font-weight': '700',
+            'letter-spacing': labelLang === 'zh' ? '0' : '0.03em',
+            'font-family': labelLang === 'zh' ? 'system-ui, -apple-system, sans-serif' : 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            class: 'node-text'
+          }, gNode);
+          txt.textContent = labelLang === 'zh' ? club.shortZh : code;
+
+          gNode.addEventListener('mouseenter', (ev) => {
+            hoveredTeam = code;
+            updateHighlights();
+            showTooltip(ev, code, sIdx, seasons);
+          });
+          gNode.addEventListener('mousemove', (ev) => moveTooltip(ev));
+          gNode.addEventListener('mouseleave', () => {
+            hoveredTeam = null;
+            updateHighlights();
+            hideTooltip();
+          });
+          gNode.addEventListener('click', () => togglePin(code));
+        });
+      });
+
+      // 6. Right-side 2025-26 Final Season Club Names
+      const lastSeason = seasons[numSeasons - 1];
+      const rightX = xOf(numSeasons - 1) + 28;
+      lastSeason.table.forEach(([code, pts], idx) => {
+        const rank = idx + 1;
+        const y = yOf(rank);
+        const club = CLUBS[code];
+        const gLabel = el('g', {
+          class: 'team-node right-label',
+          'data-team': code
+        }, rightLabelsLayer);
+
+        const lbl = el('text', {
+          x: rightX,
+          y: y + 4,
+          fill: fg,
+          'font-size': '11.5',
+          'font-weight': rank <= 4 ? '700' : '500'
+        }, gLabel);
+        lbl.textContent = `${club.shortZh} · ${pts}`;
+
+        gLabel.addEventListener('mouseenter', (ev) => {
+          hoveredTeam = code;
+          updateHighlights();
+          showTooltip(ev, code, numSeasons - 1, seasons);
+        });
+        gLabel.addEventListener('mousemove', (ev) => moveTooltip(ev));
+        gLabel.addEventListener('mouseleave', () => {
+          hoveredTeam = null;
+          updateHighlights();
+          hideTooltip();
+        });
+        gLabel.addEventListener('click', () => togglePin(code));
+      });
+
+      updateHighlights();
+    }
+
+    function updateHighlights() {
+      const light = isLightTheme();
+      const neutralFill = light ? '#cbd5e1' : '#334155';
+      const neutralText = light ? '#334155' : '#cbd5e1';
+      const mutedStroke = light ? '#94a3b8' : '#475569';
+
+      const anyFocus = Boolean(hoveredTeam) || pinnedTeams.size > 0;
+      const svg = document.getElementById('bump-chart');
+
+      svg.querySelectorAll('.team-path').forEach(path => {
+        const code = path.dataset.team;
+        const consecutive = path.dataset.consecutive === '1';
+        const club = CLUBS[code];
+        const emph = isTeamEmphasized(code);
+
+        if (emph) {
+          path.setAttribute('stroke', club.color);
+          path.setAttribute('stroke-width', (hoveredTeam === code || pinnedTeams.has(code)) ? (consecutive ? 3.8 : 2.2) : (consecutive ? 2.8 : 1.5));
+          path.setAttribute('stroke-opacity', consecutive ? (anyFocus ? 0.96 : 0.85) : 0.55);
+          if (path.parentNode && path.parentNode.parentNode) {
+            path.parentNode.parentNode.appendChild(path.parentNode);
+          }
+        } else {
+          path.setAttribute('stroke', mutedStroke);
+          path.setAttribute('stroke-width', consecutive ? 1.2 : 0.9);
+          path.setAttribute('stroke-opacity', anyFocus ? 0.08 : 0.16);
+        }
+      });
+
+      svg.querySelectorAll('.team-node:not(.right-label)').forEach(g => {
+        const code = g.dataset.team;
+        const club = CLUBS[code];
+        const emph = isTeamEmphasized(code);
+        const rect = g.querySelector('.node-rect');
+        const text = g.querySelector('.node-text');
+
+        if (emph) {
+          g.style.opacity = '1';
+          rect.setAttribute('fill', club.color);
+          text.setAttribute('fill', '#ffffff');
+        } else if (anyFocus) {
+          g.style.opacity = '0.22';
+          rect.setAttribute('fill', neutralFill);
+          text.setAttribute('fill', neutralText);
+        } else {
+          g.style.opacity = '0.72';
+          rect.setAttribute('fill', neutralFill);
+          text.setAttribute('fill', neutralText);
+        }
+      });
+
+      svg.querySelectorAll('.right-label').forEach(g => {
+        const code = g.dataset.team;
+        const emph = isTeamEmphasized(code);
+        g.style.opacity = emph ? '1' : (anyFocus ? '0.22' : '0.68');
+      });
+
+      const statusEl = document.getElementById('active-status');
+      if (hoveredTeam) {
+        statusEl.textContent = `正在预览：${CLUBS[hoveredTeam].zh} (${CLUBS[hoveredTeam].name})`;
+      } else if (pinnedTeams.size > 0) {
+        statusEl.textContent = `已锁定对比：${[...pinnedTeams].map(c => CLUBS[c].zh).join(' · ')}`;
+      } else {
+        const modeNames = {
+          featured: '视觉聚焦模式（Big 6 + 莱斯特城高亮，其余球队清晰可读）',
+          all: '全彩模式（全部 20 队轨迹高亮）',
+          big6: 'Big 6 争冠轨迹对比',
+          champions: '2012 年以来 6 支英超冠军队',
+          darkhorses: '英超新贵与黑马轨迹'
+        };
+        statusEl.textContent = modeNames[currentMode];
+      }
+    }
+
+    // =========================================================================
+    // Tooltip
+    // =========================================================================
+    function showTooltip(ev, code, sIdx, seasons) {
+      const tip = document.getElementById('tooltip');
+      const club = CLUBS[code];
+      const s = seasons[sIdx];
+      const entryIdx = s.table.findIndex(([c]) => c === code);
+      if (entryIdx === -1) return;
+
+      const rank = entryIdx + 1;
+      const pts = s.table[entryIdx][1];
+      const h = clubHistory[code];
+
+      const fullIdx = SEASONS.findIndex(x => x.id === s.id);
+      let deltaHtml = '<span class="text-[var(--muted-foreground)]">首季基准</span>';
+      if (fullIdx > 0) {
+        const prevSeason = SEASONS[fullIdx - 1];
+        const prevPos = prevSeason.table.findIndex(([c]) => c === code);
+        if (prevPos === -1) {
+          deltaHtml = '<span style="color:#10B981;font-weight:600">▲ 升班马</span>';
+        } else {
+          const diff = (prevPos + 1) - rank;
+          if (diff > 0) deltaHtml = `<span style="color:#10B981;font-weight:600">▲ 上升 ${diff} 名</span>`;
+          else if (diff < 0) deltaHtml = `<span style="color:#EF4444;font-weight:600">▼ 下降 ${Math.abs(diff)} 名</span>`;
+          else deltaHtml = `<span class="text-[var(--muted-foreground)]">● 排名持平</span>`;
+        }
+      }
+
+      const badge = rank === 1
+        ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">🏆 冠军</span>'
+        : rank <= 4
+          ? '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-500 font-semibold">欧冠区</span>'
+          : rank >= 18
+            ? '<span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 font-semibold">降级</span>'
+            : '';
+
+      tip.innerHTML = `
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full shrink-0" style="background:${club.color}"></span>
+            <div>
+              <div class="font-bold text-sm text-[var(--foreground)] leading-tight">${club.zh}</div>
+              <div class="text-[11px] text-[var(--muted-foreground)]">${club.name}</div>
+            </div>
+          </div>
+          ${badge}
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 py-2 border-y border-[var(--border)] text-center">
+          <div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">赛季</div>
+            <div class="font-mono font-bold">${s.label}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">最终排名</div>
+            <div class="font-mono font-bold text-sm">#${rank}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">最终积分</div>
+            <div class="font-mono font-bold text-sm">${pts}</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-2 text-[11px]">
+          <span>较上季：${deltaHtml}</span>
+          <span class="text-[var(--muted-foreground)]">14季均排 #${h.avgRank.toFixed(1)}</span>
+        </div>
+        <div class="mt-1.5 text-[10px] text-[var(--muted-foreground)]">
+          点击可${pinnedTeams.has(code) ? '取消锁定' : '锁定对比'}该队完整曲线
+        </div>
+      `;
+
+      tip.classList.remove('hidden');
+      moveTooltip(ev);
+    }
+
+    function moveTooltip(ev) {
+      const tip = document.getElementById('tooltip');
+      const pad = 16;
+      const tw = tip.offsetWidth || 230;
+      const th = tip.offsetHeight || 140;
+      let left = ev.clientX + pad;
+      let top = ev.clientY + pad;
+      if (left + tw > window.innerWidth - 10) left = ev.clientX - tw - pad;
+      if (top + th > window.innerHeight - 10) top = ev.clientY - th - pad;
+      tip.style.left = `${Math.max(8, left)}px`;
+      tip.style.top = `${Math.max(8, top)}px`;
+    }
+
+    function hideTooltip() {
+      document.getElementById('tooltip').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // Event Wiring
+    // =========================================================================
+    document.querySelectorAll('#mode-buttons button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentMode = btn.dataset.mode;
+        pinnedTeams.clear();
+        updateControlButtons();
+        renderClubChips();
+        renderPinnedCards();
+        updateHighlights();
+      });
+    });
+
+    document.querySelectorAll('.range-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentRange = btn.dataset.range;
+        updateControlButtons();
+        renderChart();
+      });
+    });
+
+    document.getElementById('toggle-lang').addEventListener('click', () => {
+      labelLang = labelLang === 'en' ? 'zh' : 'en';
+      updateControlButtons();
+      renderChart();
+    });
+
+    document.getElementById('toggle-theme').addEventListener('click', () => {
+      document.documentElement.classList.toggle('light');
+      updateControlButtons();
+      renderClubChips();
+      renderChart();
+    });
+
+    document.getElementById('clear-pins').addEventListener('click', () => {
+      pinnedTeams.clear();
+      renderClubChips();
+      renderPinnedCards();
+      updateHighlights();
+    });
+
+    // Initial render
+    updateControlButtons();
+    renderClubChips();
+    renderChampionsTimeline();
+    renderChart();
+  </script>
+</body>
+</html>
