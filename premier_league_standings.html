@@ -2008,6 +2008,8 @@
 
       const escXml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       const innerMarkup = srcSvg.innerHTML;
+      const accent = light ? '#0284c7' : '#38bdf8';
+      const siteUrl = 'ronwithlove.github.io/premier-league';
 
       return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif">
@@ -2015,10 +2017,13 @@
   <rect x="${outerPad}" y="${outerPad}" width="${totalW - outerPad * 2}" height="${totalH - outerPad * 2}" rx="18" fill="${card}" stroke="${borderCol}" stroke-width="1.5" />
   <text x="${outerPad + 22}" y="${outerPad + 32}" fill="${fg}" font-size="20" font-weight="700">${escXml(viewLabel)}</text>
   <text x="${outerPad + 22}" y="${outerPad + 52}" fill="${muted}" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">${escXml(rangeStr)}  ·  ${escXml(statusTxt)}</text>
+  <rect x="${totalW - outerPad - 284}" y="${outerPad + 16}" width="262" height="28" rx="14" fill="${light ? '#f0f9ff' : '#082f49'}" stroke="${accent}" stroke-opacity="0.5" stroke-width="1" />
+  <text x="${totalW - outerPad - 153}" y="${outerPad + 34}" text-anchor="middle" fill="${accent}" font-size="11.5" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">🌐 ${siteUrl}</text>
   <g transform="translate(${outerPad + 12}, ${outerPad + headerH})">
     ${innerMarkup}
   </g>
-  <text x="${totalW - outerPad - 20}" y="${totalH - outerPad - 10}" text-anchor="end" fill="${muted}" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Premier League Explorer · 2012–2027</text>
+  <text x="${outerPad + 22}" y="${totalH - outerPad - 10}" fill="${muted}" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Premier League Explorer · 2012–2027</text>
+  <text x="${totalW - outerPad - 22}" y="${totalH - outerPad - 10}" text-anchor="end" fill="${accent}" font-size="11.5" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">${siteUrl}</text>
 </svg>`;
     }
 
